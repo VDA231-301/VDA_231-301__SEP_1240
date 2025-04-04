@@ -4,7 +4,7 @@
   "additionalProperties": false,
   "description": "This is an examplary Sub-Schema of VDA 231-301 which validates the content for Tensile Data Exchange according SEP 1240. It introduces some specific defs for Tensile Curves and adds an if clause to the generic information set, so that the curves are validated.",
   "title": "VDA 231-301 TestReport JSON schema - exemplary sub schema Tensile Testing",
-  "_baseSchemaVersion": "0.0.1",
+  "_baseSchemaVersion": "0.0.2",
   "type": "object",
   "$defs": {
     "SEP_1240_plasticity.ConsolidatedCharacteristicValue": {
@@ -114,6 +114,207 @@
         },
         "Value": {
           "description": "Elongation A50 generic regardless of type",
+          "maximum": 100,
+          "minimum": 0,
+          "type": "number"
+        },
+        "ValueType": {
+          "oneOf": [
+            {
+              "const": "Number"
+            }
+          ]
+        }
+      },
+      "required": [
+        "Property",
+        "Value"
+      ],
+      "type": "object"
+    },
+    "SEP_1240_Tensile.SingleResult": {
+      "allOf": [
+        {
+          "properties": {
+            "_id": {
+              "$ref": "#/$defs/Generic.Identifier"
+            },
+            "_type": {
+              "const": "SingleResult",
+              "type": "string"
+            },
+            "Property": {
+              "$ref" : "#/$defs/Generic.Value"
+            },
+            "Attachment": {
+              "$ref": "#/$defs/Generic.Attachment"
+            },
+            "Comment": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "ConsolidatedValueID": {
+              "$ref": "#/$defs/Generic.Identifier"
+            }
+          }
+        }
+      ],
+      "type": "object"
+    },
+    "SEP_1240_Tensile.TensileStrength": {
+      "properties": {
+        "Property": {
+          "const": "Tensile Strength"
+        },
+        "Unit": {
+          "const": "MPa"
+        },
+        "Symbol": {
+          "const": "Rm"
+        },
+        "Value": {
+          "description": "Tensile value with precision to 1 decimal places",
+          "maximum": 2500,
+          "minimum": 1,
+          "multipleOf": 0.1,
+          "type": "number"
+        },
+        "ValueType": {
+          "oneOf": [
+            {
+              "const": "Number"
+            }
+          ]
+        }
+      },
+      "required": [
+        "Property",
+        "Value"
+      ],
+      "type": "object"
+    },
+    "SEP_1240_Tensile.YieldStrength": {
+      "properties": {
+        "Property": {
+          "const": "Yield Strength"
+        },
+        "Unit": {
+          "const": "MPa"
+        },
+        "Symbol": {
+          "const": "Rp0.2"
+        },
+        "Value": {
+          "description": "Yield strength (Rp02 or Re)",
+          "maximum": 2000,
+          "minimum": 1,
+          "multipleOf": 0.1,
+          "type": "number"
+        },
+        "ValueType": {
+          "oneOf": [
+            {
+              "const": "Number"
+            }
+          ]
+        }
+      },
+      "required": [
+        "Property",
+        "Value"
+      ],
+      "type": "object"
+    },
+    "SEP_1240_Tensile.UpperYieldStrength": {
+      "properties": {
+        "Property": {
+          "const": "Yield Strength"
+        },
+        "Unit": {
+          "const": "N/mm^2"
+        },
+        "Symbol": {
+          "const": "R_eH"
+        },
+        "Rounding": {
+          "$ref": "#/$defs/Generic.RestrictedString"
+        },
+        "RoundingAccuracy": {
+          "type": "number"
+        },
+        "Value": {
+          "description": "Upper Yield strength (R_eH)",
+          "maximum": 2000,
+          "minimum": 1,
+          "multipleOf": 0.1,
+          "type": "number"
+        },
+        "ValueType": {
+          "oneOf": [
+            {
+              "const": "Number"
+            }
+          ]
+        }
+      },
+      "required": [
+        "Property",
+        "Value"
+      ],
+      "type": "object"
+    },
+    "SEP_1240_Tensile.ElongationAtFracture": {
+      "properties": {
+        "Property": {
+          "const": "Elongation At Fracture"
+        },
+        "Unit": {
+          "const": "%"
+        },
+        "Symbol": {
+          "const": "A5"
+        },
+        "Value": {
+          "description": "Elongation at Fracture",
+          "maximum": 100,
+          "minimum": 0,
+          "type": "number"
+        },
+        "ValueType": {
+          "oneOf": [
+            {
+              "const": "Number"
+            }
+          ]
+        }
+      },
+      "required": [
+        "Property",
+        "Value"
+      ],
+      "type": "object"
+    },
+    "SEP_1240_Tensile.UltimateStrain": {
+      "properties": {
+        "Property": {
+          "const": "Ultimate Strain"
+        },
+        "Unit": {
+          "const": "%"
+        },
+        "Symbol": {
+          "const": "A"
+        },
+        "Rounding": {
+          "$ref": "#/$defs/Generic.RestrictedString"
+        },
+        "RoundingAccuracy": {
+          "type": "number"
+        },
+        "Value": {
+          "description": "Ultimate Strain",
           "maximum": 100,
           "minimum": 0,
           "type": "number"
@@ -402,8 +603,8 @@
         "AccreditationDate": {
           "$ref": "#/$defs/Generic.Date"
         },
-        "Regulation": {
-          "$ref": "#/$defs/Generic.Regulation"
+        "Specification": {
+          "$ref": "#/$defs/Generic.Specification"
         },
         "ValidUntil": {
           "$ref": "#/$defs/Generic.Date"
@@ -412,7 +613,7 @@
       "required": [
         "_id",
         "_type",
-        "Regulation",
+        "Specification",
         "AccreditationDate"
       ],
       "type": "object"
@@ -426,39 +627,25 @@
           "const": "Component",
           "type": "string"
         },
-        "Attachments": {
-          "items": {
-            "$ref": "#/$defs/Generic.Attachment"
-          },
-          "type": "array"
-        },
-        "Cavity": {
+        "PartNumber": {
           "$ref": "#/$defs/Generic.RestrictedString"
         },
         "Color": {
           "$ref": "#/$defs/Generic.RestrictedString"
         },
-        "DateOfReceipt": {
-          "$ref": "#/$defs/Generic.Date"
-        },
-        "LayerSequence": {
-          "$ref": "#/$defs/Generic.InformationSet"
+        "ProductionSite": {
+          "$ref": "#/$defs/Generic.Location"
         },
         "Machine": {
           "$ref": "#/$defs/Generic.RestrictedString"
         },
-        "MaterialClass": {
-          "$ref": "#/$defs/Generic.RestrictedString",
-          "description": "According to VDA 231-200"
-        },
-        "MaterialGroup": {
-          "$ref": "#/$defs/Generic.RestrictedString",
-          "description": "According to VDA 231-106"
-        },
-        "MaterialName": {
+        "Tool": {
           "$ref": "#/$defs/Generic.RestrictedString"
         },
-        "PartNumber": {
+        "Cavity": {
+          "$ref": "#/$defs/Generic.RestrictedString"
+        },
+        "SerialNumber": {
           "$ref": "#/$defs/Generic.RestrictedString"
         },
         "ProductionBatchNumber": {
@@ -467,14 +654,61 @@
         "ProductionDate": {
           "$ref": "#/$defs/Generic.Date"
         },
-        "ProductionSite": {
-          "$ref": "#/$defs/Generic.Location"
+        "MaterialGroup": {
+          "$ref": "#/$defs/Generic.RestrictedString",
+          "description": "According to VDA 231-106"
         },
-        "SerialNumber": {
+        "MaterialClass": {
+          "$ref": "#/$defs/Generic.RestrictedString",
+          "description": "According to VDA 231-200"
+        },
+        "MaterialName": {
           "$ref": "#/$defs/Generic.RestrictedString"
         },
-        "Tool": {
-          "$ref": "#/$defs/Generic.RestrictedString"
+        "MaterialIdentifiers": {
+          "items": {
+            "$ref": "#/$defs/Generic.RestrictedString"
+          },
+          "type": "array",
+          "description": "According to VDA 231-300"
+        },
+        "SurfaceIdentifiers": {
+          "items": {
+            "$ref": "#/$defs/Generic.RestrictedString"
+          },
+          "type": "array",
+          "description": "According to VDA 231-300"
+        },
+        "Specifications": {
+          "items": {
+            "$ref": "#/$defs/Generic.Specification"
+          },
+          "type": "array",
+          "description": "A list of associated specifications regarding this component."
+        },
+        "LayerSequence": {
+          "$ref": "#/$defs/Generic.InformationSet"
+        },
+        "DateOfReceipt": {
+          "$ref": "#/$defs/Generic.Date"
+        },
+        "Attachments": {
+          "items": {
+            "$ref": "#/$defs/Generic.Attachment"
+          },
+          "type": "array"
+        },
+        "DeviationSpecificationText": {
+          "$ref": "#/$defs/Generic.RestrictedText",
+          "description": "The text describing allowed deviation from the specification."
+        },
+        "DeviationSpecificationCodeFile": {
+          "$ref": "#/$defs/Generic.Attachment",
+          "description": "The JSON file containing the deviation specification code."
+        },
+        "Comment": {
+          "$ref": "#/$defs/Generic.RestrictedText",
+          "description": "Additional information about the component."
         }
       },
       "required": [
@@ -596,11 +830,6 @@
       "pattern": "^\\d{4}-\\d{2}$",
       "type": "string"
     },
-    "Generic.DUNS": {
-      "description": "DUNS Number",
-      "pattern": "^\\d{9}$",
-      "type": "string"
-    },
     "Generic.Extraction": {
       "additionalProperties": false,
       "properties": {
@@ -623,10 +852,10 @@
         "Position": {
           "$ref": "#/$defs/Generic.RestrictedString"
         },
-        "Regulation": {
-          "$ref": "#/$defs/Generic.Regulation"
+        "Specification": {
+          "$ref": "#/$defs/Generic.Specification"
         },
-        "Remark": {
+        "Comment": {
           "$ref": "#/$defs/Generic.RestrictedString"
         }
       },
@@ -635,7 +864,7 @@
         "_type",
         "Method",
         "Position",
-        "Regulation"
+        "Specification"
       ],
       "type": "object"
     },
@@ -775,6 +1004,29 @@
       },
       "type": "object"
     },
+    "Generic.LocationIdentification": {
+      "description": "One or more identifiers for a location.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/Generic.LocationIdentifier"
+      }
+    },
+    "Generic.LocationIdentifier": {
+      "type": "object",
+      "properties": {
+        "Identifier": {
+          "$ref": "#/$defs/Generic.RestrictedString"
+        },
+        "Type": {
+          "$ref": "#/$defs/Generic.RestrictedString"
+        }
+      },
+      "required": [
+        "Identifier",
+        "Type"
+      ]
+    },
     "Generic.Location": {
       "additionalProperties": false,
       "properties": {
@@ -788,17 +1040,73 @@
         "Address": {
           "$ref": "#/$defs/Generic.ContactDetails"
         },
-        "DUNS": {
-          "$ref": "#/$defs/Generic.DUNS"
+        "Identification": {
+          "$ref": "#/$defs/Generic.LocationIdentification"
         },
         "Name": {
           "$ref": "#/$defs/Generic.RestrictedString"
+        },
+        "AddressNativeLanguage": {
+          "$ref": "#/$defs/Generic.ContactDetailsNative"
         }
       },
       "required": [
         "_id",
         "_type",
-        "DUNS"
+        "Identification"
+      ],
+      "type": "object"
+    },
+    "Generic.ContactDetailsNative": {
+      "additionalProperties": false,
+      "properties": {
+        "_id": {
+          "$ref": "#/$defs/Generic.Identifier"
+        },
+        "_type": {
+          "const": "ContactDetailsNative",
+          "type": "string"
+        },
+        "Street": {
+          "$ref": "#/$defs/Generic.LongString"
+        },
+        "Street2": {
+          "$ref": "#/$defs/Generic.LongString"
+        },
+        "Street3": {
+          "$ref": "#/$defs/Generic.LongString"
+        },
+        "HouseNumber": {
+          "$ref": "#/$defs/Generic.LongString"
+        },
+        "AdditionToAddress": {
+          "$ref": "#/$defs/Generic.LongString"
+        },
+        "ZipCode": {
+          "$ref": "#/$defs/Generic.LongString"
+        },
+        "City": {
+          "$ref": "#/$defs/Generic.LongString"
+        },
+        "StateRegion": {
+          "$ref": "#/$defs/Generic.LongString"
+        },
+        "Country": {
+          "$ref": "#/$defs/Generic.LongString"
+        },
+        "EMail": {
+          "format": "email",
+          "type": "string"
+        },
+        "Fax": {
+          "$ref": "#/$defs/Generic.LongString"
+        },
+        "Phone": {
+          "$ref": "#/$defs/Generic.LongString"
+        }
+      },
+      "required": [
+        "_type"
       ],
       "type": "object"
     },
@@ -836,8 +1144,8 @@
         "MeasurementSetup": {
           "$ref": "#/$defs/Generic.Attachment"
         },
-        "Regulation": {
-          "$ref": "#/$defs/Generic.Regulation"
+        "Specification": {
+          "$ref": "#/$defs/Generic.Specification"
         },
         "SystemType": {
           "$ref": "#/$defs/Generic.RestrictedString"
@@ -885,8 +1193,8 @@
           "const": "Person",
           "type": "string"
         },
-        "DUNS": {
-          "$ref": "#/$defs/Generic.DUNS"
+        "OrganizationIdentification": {
+          "$ref": "#/$defs/Generic.LocationIdentification"
         },
         "EMail": {
           "format": "email",
@@ -940,8 +1248,8 @@
           "$ref": "#/$defs/Generic.InformationSet",
           "description": "The information set related to this process step."
         },
-        "Regulation": {
-          "$ref": "#/$defs/Generic.Regulation",
+        "Specification": {
+          "$ref": "#/$defs/Generic.Specification",
           "description": "The regulation associated with this process step."
         }
       },
@@ -1010,7 +1318,7 @@
       ],
       "type": "object"
     },
-    "Generic.Regulation": {
+    "Generic.Specification": {
       "additionalProperties": false,
       "properties": {
         "Authority": {
@@ -1019,8 +1327,19 @@
         "DOI": {
           "type": "string"
         },
-        "Features": {
-          "$ref": "#/$defs/Generic.RestrictedString"
+        "FeatureText": {
+          "$ref": "#/$defs/Generic.LongString"
+        },
+        "FeatureList": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Generic.RestrictedString"
+          },
+          "example": [
+            "23",
+            "R",
+            "6/4"
+          ]
         },
         "IssueDate": {
           "$ref": "#/$defs/Generic.DateMonth"
@@ -1143,7 +1462,7 @@
       ],
       "type": "object"
     },
-    "Generic.TestExecution": {
+"Generic.TestExecution": {
       "additionalProperties": false,
       "properties": {
         "_id": {
@@ -1153,30 +1472,32 @@
           "const": "TestExecution",
           "type": "string"
         },
+        "Designation": {
+          "$ref": "#/$defs/Generic.RestrictedString"
+        },
+        "Numerator": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "Tester": {
+          "$ref": "#/$defs/Generic.Person",
+          "description": "The person who executed the test."
+        },
+        "StartTime": {
+          "$ref": "#/$defs/Generic.Date",
+          "description": "The date the execution of the test began."
+        },
         "MeasurementSystems": {
           "items": {
             "$ref": "#/$defs/Generic.MeasurementSystem"
           },
           "type": "array"
         },
-        "Numerator": {
-          "minimum": 1,
-          "type": "integer"
-        },
         "RawData": {
           "items": {
             "$ref": "#/$defs/Generic.InformationSet"
           },
           "type": "array"
-        },
-        "RawDataTTR": {
-          "items": {
-            "$ref": "#/$defs/SEP_1240_plasticity.InformationSet"
-          },
-          "type": "array"
-        },
-        "RegulationDesignation": {
-          "$ref": "#/$defs/Generic.RestrictedString"
         },
         "SingleResults": {
           "items": {
@@ -1187,14 +1508,6 @@
         "Specimen": {
           "$ref": "#/$defs/Generic.Specimen"
         },
-        "TestDate": {
-          "$ref": "#/$defs/Generic.Date",
-          "description": "The date the execution of the test began."
-        },
-        "Tester": {
-          "$ref": "#/$defs/Generic.Person",
-          "description": "The person who executed the test."
-        },
         "TestParameters": {
           "$ref": "#/$defs/Generic.InformationSet"
         }
@@ -1202,7 +1515,7 @@
       "required": [
         "_id",
         "_type",
-        "RegulationDesignation",
+        "Designation",
         "Numerator",
         "Specimen",
         "MeasurementSystems",
@@ -1246,6 +1559,13 @@
       ],
       "type": "object"
     },
+    "Generic.RestrictedText": {
+      "description": "A string with max length of 1000 and only 7-bit ASCII characters",
+      "maxLength": 1000,
+      "minLength": 0,
+      "pattern": "^[\\x20-\\x7E]*$",
+      "type": "string"
+    },
     "Generic.TestSeries": {
       "additionalProperties": false,
       "properties": {
@@ -1256,6 +1576,9 @@
           "const": "TestSeries",
           "type": "string"
         },
+        "Specification": {
+          "$ref": "#/$defs/Generic.Specification"
+        },
         "TestType": {
           "$ref": "#/$defs/Generic.RestrictedString"
         },
@@ -1263,40 +1586,18 @@
           "$ref": "#/$defs/Generic.InformationSet",
           "additionalProperties": false
         },
-        "Assessment": {
-          "type": "string"
-        },
-        "Comment": {
-          "$ref": "#/$defs/Generic.RestrictedString"
-        },
-        "ConsolidatedCharacteristicValues": {
-          "items": {
-            "$ref": "#/$defs/Generic.ConsolidatedCharacteristicValue"
-          },
-          "minItems": 1,
-          "type": "array"
-        },
-        "Executions": {
-          "items": {
-            "$ref": "#/$defs/Generic.TestExecution"
-          },
-          "type": "array"
-        },
-        "FeaturesAccordingToRegulation": {
-          "$ref": "#/$defs/Generic.RestrictedString"
-        },
         "NumberOfExecutions": {
           "minimum": 1,
           "type": "integer"
+        },
+        "Assessment": {
+          "type": "string"
         },
         "PredecessorId": {
           "type": [
             "string",
             "null"
           ]
-        },
-        "Regulation": {
-          "$ref": "#/$defs/Generic.Regulation"
         },
         "SuccessorId": {
           "type": [
@@ -1306,17 +1607,33 @@
         },
         "TestingCenter": {
           "$ref": "#/$defs/Generic.TestingCenter"
+        },
+        "Comment": {
+          "$ref": "#/$defs/Generic.RestrictedText"
+        },
+        "Executions": {
+          "items": {
+            "$ref": "#/$defs/Generic.TestExecution"
+          },
+          "type": "array"
+        },
+        "ConsolidatedCharacteristicValues": {
+          "items": {
+            "$ref": "#/$defs/Generic.ConsolidatedCharacteristicValue"
+          },
+          "minItems": 1,
+          "type": "array"
         }
       },
       "required": [
         "_id",
         "_type",
-        "  ",
+        "Specification",
         "NumberOfExecutions",
-        "TestingCenter",
-        "ConsolidatedCharacteristicValues",
         "PredecessorId",
-        "SuccessorId"
+        "SuccessorId",
+        "TestingCenter",
+        "ConsolidatedCharacteristicValues"
       ],
       "type": "object"
     },
@@ -1499,8 +1816,8 @@
     }
   },
   "properties": {
-    "$schema": {
-      "const": "https://VDA_231-301_V1.0_Schema_Generic.json",
+    "_schemaVersion": {
+      "const": "0.0.2",
       "description": "The URL of the schema version that defines the structure of this test report."
     },
     "_id": {
@@ -1564,12 +1881,13 @@
   "required": [
     "_id",
     "_type",
-    "$schema",
+    "_schemaVersion",
     "ClientOrderNumber",
     "LaboratoryOrderNumber",
     "OrderReference",
     "OrderDate",
     "ReportDate",
+    "Signatory",
     "Client",
     "Contractor",
     "Components",
