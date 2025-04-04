@@ -2,6 +2,7 @@
     "_id": "00000000-63ef-a8d9-63dc-65a5b4c34f6e",
     "_type": "TestReport",
     "_schemaVersion": "0.0.2",
+    "Signatory": "My signature",
     "Client": {
         "_id": "00000000-63ef-a8d9-63dc-65a5b4c34f6e",
         "_type": "Location",
@@ -21,7 +22,20 @@
         {
             "_id": "a01543d7-aa5a-4f28-87ac-53e92c6aeff9",
             "_type": "Component",
-            "Designation": "Door beam"
+            "Designation": "Door beam",
+            "MaterialGroup": "Soft deep-drawing steel",
+            "MaterialName": "1.0335 - DD13",
+            "MaterialIdentifiers" : ["01"],
+            "ProductionSite":{
+                "_id":"00000000-63ef-a8d9-63dc-65a5b4c34f6e",
+                "_type" : "Location",
+                "Name" : "Salzgitter AG",
+                "Identification" : [{
+                    "Identifier": "232371009",
+                    "Type": "DUNS"
+                }
+            ]
+            }
         }
     ],
     "Contractor": {
@@ -35,7 +49,7 @@
                     "Date": "2019-11-11",
                     "Timestamp": 1731283200
                 },
-                "Regulation": {
+                "Specification": {
                     "IssueDate": "2018-03",
                     "Number": "17025",
                     "Type": "DIN EN ISO/IEC"
@@ -50,7 +64,7 @@
                 "AccreditationDate": {
                     "Date": "2019-11-11"
                 },
-                "Regulation": {
+                "Specification": {
                     "IssueDate": "2016-03",
                     "Number": "ABC DEF 1234",
                     "Type": "Firma xy"
@@ -67,13 +81,22 @@
                 "Fax": "1234/456135",
                 "Phone": "1234/456135"
             },
-            "DUNS": "123423992",
+            "Identification": [{
+                "Identifier": "123423992",
+                "Type": "DUNS"
+            }
+            ],
             "Name": "Laboratory A"
         },
         "TestingManager": {
             "_id": "00000000-63ef-a8d9-63dc-65a5b4c34f6e",
             "_type": "Person",
-            "DUNS": "123423992",
+            "OrganizationIdentification": [
+                {
+                  "Type": "DUNS",
+                  "Identifier": "123423992"
+                }
+              ],
             "EMail": "Thorsten@example.com",
             "FirstName": "Thorsten",
             "ID-Number": "63dc65a",
@@ -100,7 +123,6 @@
                     "_id": "fe663862-7045-49aa-be70-f21fe386cd15",
                     "_type": "ConsolidatedCharacteristicValue",
                     "Aggregation": "Mean value",
-                    "Comment": null,
                     "CriterionType": "Variable/Quantitative",
                     "Property": "Yield Strength",
                     "Rounding": "Commercial",
@@ -113,7 +135,6 @@
                     "_id": "365d78e0-f2d1-41e0-87bc-ad2d473dbfe5",
                     "_type": "ConsolidatedCharacteristicValue",
                     "Aggregation": "Mean value",
-                    "Comment": null,
                     "CriterionType": "Variable/Quantitative",
                     "Property": "Tensile Strength",
                     "Rounding": "Commercial",
@@ -126,7 +147,6 @@
                     "_id": "1d021954-cf83-4db3-b213-3cf5357e5820",
                     "_type": "ConsolidatedCharacteristicValue",
                     "Aggregation": "Mean value",
-                    "Comment": null,
                     "CriterionType": "Variable/Quantitative",
                     "Property": "Elongation at Fracture",
                     "Rounding": "Commercial",
@@ -139,7 +159,6 @@
                     "_id": "00000000-63ef-a8d9-63dc-65a5b4c11111",
                     "_type": "ConsolidatedCharacteristicValue",
                     "Aggregation": "Mean value",
-                    "Comment": null,
                     "CriterionType": "Variable/Quantitative",
                     "Property": "Upper yield strength",
                     "Rounding": "Commercial",
@@ -152,7 +171,6 @@
                     "_id": "00000000-63ef-a8d9-63dc-65a5b4c22222",
                     "_type": "ConsolidatedCharacteristicValue",
                     "Aggregation": "Mean value",
-                    "Comment": null,
                     "CriterionType": "Variable/Quantitative",
                     "Property": "Ultimate strain",
                     "Rounding": "Commercial",
@@ -205,9 +223,9 @@
                                 ],
                                 "MimeType": "application/pdf"
                             },
-                            "Regulation": {
+                            "Specification": {
                                 "DOI": "https://dx.doi.org/10.31030/2704407",
-                                "Features": "Class 1",
+                                "FeatureText": "Class 1",
                                 "IssueDate": "2019-11",
                                 "Number": "7500-1",
                                 "Title": "Metallic materials - Calibration and verification of static uniaxial testing machines - Part 1: Tension/compression testing machines - Calibration and verification of the force-measuring system",
@@ -253,8 +271,8 @@
                                 ],
                                 "MimeType": "application/pdf"
                             },
-                            "Regulation": {
-                                "Features": "Class 1",
+                            "Specification": {
+                                "FeatureText": "Class 1",
                                 "IssueDate": "2012-11",
                                 "Number": "9513",
                                 "Title": "Metallic materials - Calibration of extensometer systems used in uniaxial testing",
@@ -2089,7 +2107,7 @@
                             "Designation": "Stress-strain curve"
                         }
                     ],
-                    "RegulationDesignation": "Tensile testing",
+                    "Designation": "Tensile testing",
                     "SingleResults": [
                         {
                             "_id": "977a8762-482b-48a2-884b-1745ccb91fba",
@@ -2121,7 +2139,6 @@
                         {
                             "_id": "00000000-63ef-a8d9-63dc-65a5b4c34f6e",
                             "_type": "SingleResult",
-                            "Comment": null,
                             "ConsolidatedValueID": "00000000-63ef-a8d9-63dc-65a5b4c11111",
                             "Property": "Upper yield strength",
                             "Rounding": "Commercial",
@@ -2133,7 +2150,6 @@
                         {
                             "_id": "00000000-63ef-a8d9-63dc-65a5b4c34f6e",
                             "_type": "SingleResult",
-                            "Comment": null,
                             "ConsolidatedValueID": "00000000-63ef-a8d9-63dc-65a5b4c22222",
                             "Property": "Ultimate strain",
                             "Rounding": "Commercial",
@@ -2147,6 +2163,8 @@
                         "_id": "00000000-63ef-a8d9-63dc-65a5b4c34f6e",
                         "_type": "Specimen",
                         "AdditionalProperties": {
+                            "_id": "00000000-63ef-a8d9-63dc-65a5b4c34f6e",
+                            "_type" :"InformationSet",
                             "Attributes": [
                                 {
                                     "Property": "Mass",
@@ -2199,13 +2217,13 @@
                             },
                             "Method": "Laser cutting",
                             "Position": "Picture A.4 - c",
-                            "Regulation": {
+                            "Specification": {
                                 "IssueDate": "2017-11",
                                 "Number": "377",
                                 "Title": "Steel and steel products - Location and preparation of samples and test pieces for mechanical testing",
                                 "Type": "ISO"
                             },
-                            "Remark": "..."
+                            "Comment": "..."
                         },
                         "Flagging": "Blue test specimen at the top left",
                         "ProcessHistory": [
@@ -2230,8 +2248,8 @@
                                     ],
                                     "Designation": "Laser Cutting"
                                 },
-                                "Regulation": {
-                                    "Features": "VDA007",
+                                "Specification": {
+                                    "FeatureText": "VDA007",
                                     "IssueDate": "2023-10",
                                     "Number": "4711",
                                     "Title": "Company Standard A",
@@ -2317,10 +2335,10 @@
                     }
                 }
             ],
-            "FeaturesAccordingToRegulation": "Method A",
+            "TestType": "Method A",
             "NumberOfExecutions": 3,
             "PredecessorId": null,
-            "Regulation": {
+            "Specification": {
                 "Authority": "DIN",
                 "IssueDate": "2019-11",
                 "Number": "6892-1",
@@ -2338,7 +2356,7 @@
                         "AccreditationDate": {
                             "Date": "2019-11-11"
                         },
-                        "Regulation": {
+                        "Specification": {
                             "IssueDate": "2018-03",
                             "Number": "17025",
                             "Type": "DIN EN ISO/IEC"
@@ -2353,7 +2371,7 @@
                         "AccreditationDate": {
                             "Date": "2019-11-11"
                         },
-                        "Regulation": {
+                        "Specification": {
                             "IssueDate": "2018-03",
                             "Number": "ABC DEF 1234",
                             "Type": "Firma xy"
@@ -2377,7 +2395,11 @@
                         "Street": "Musterstraße",
                         "ZipCode": "4711"
                     },
-                    "DUNS": "123423992",
+                    "Identification": [{
+                        "Identifier": "123423992",
+                        "Type": "DUNS"
+                    }
+                    ],
                     "Name": "Laboratory A"
                 },
                 "TestingManager": {
