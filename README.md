@@ -5,4 +5,4 @@
 - Schema: [VDA_231-301_Schema_SEP_1240_plasticity.json](./VDA_231-301_Schema_SEP_1240_plasticity.json)
 - Example test report JSON: [VDA_231-301_Example_TensileTesting.json](./VDA_231-301_Example_TensileTesting.json)
 - Standard source: https://matplus.shop/product/sep-1240?lang=en
-- Version: 0.0.1
+- Version: 1.0.0
