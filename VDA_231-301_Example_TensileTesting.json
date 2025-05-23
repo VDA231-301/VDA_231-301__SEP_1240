@@ -3,6 +3,7 @@
 	"_type": "TestReport",
 	"_schemaVersion": "0.0.2",
 	"Signatory": "My signature",
+	"Title": "Test Name",
 	"Client": {
 		"_id": "00000000-63ef-a8d9-63dc-65a5b4c34f6e",
 		"_type": "Location",
@@ -32,7 +33,7 @@
 			"ProductionSite": {
 				"_id": "00000000-63ef-a8d9-63dc-65a5b4c34f6e",
 				"_type": "Location",
-				"Name": "Salzgitter AG",
+				"Name": "ExampleCo",
 				"Identification": [
 					{
 						"Identifier": "232371009",
@@ -3025,7 +3026,7 @@
 			"NumberOfExecutions": 3,
 			"PredecessorId": null,
 			"Specification": {
-				"Authority": "DIN",
+				"Authority": "VDEh",
 				"IssueDate": "2019-11",
 				"Number": "1240",
 				"Title": "Metallic materials – Tensile testing – Part 1: Method of test at room temperature",

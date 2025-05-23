@@ -15,8 +15,7 @@
 			"$ref": "#/$defs/Generic.Identifier"
 		},
 		"_type": {
-			"const": "TestReport",
-			"type": "string"
+			"const": "TestReport"
 		},
 		"Client": {
 			"$ref": "#/$defs/Generic.Location"
@@ -70,24 +69,28 @@
 		}
 	},
 	"required": [
+		"_schemaVersion",
 		"_id",
 		"_type",
-		"_schemaVersion",
+		"Client",
 		"ClientOrderNumber",
+		"Components",
+		"Contractor",
 		"LaboratoryOrderNumber",
-		"OrderReference",
 		"OrderDate",
+		"OrderReference",
 		"ReportDate",
 		"Signatory",
-		"Client",
-		"Contractor",
-		"Components",
 		"TestSeries"
 	],
 	"$defs": {
 		"SEP_1240_plasticity.ConsolidatedCharacteristicValue": {
+			"type": "object",
+			"minItems": 4,
+			"maxItems": 4,
+			"uniqueItems": true,
 			"items": {
-				"anyOf": [
+				"prefixItems": [
 					{
 						"$ref": "#/$defs/SEP_1240_plasticity.YieldStrength"
 					},
@@ -330,12 +333,10 @@
 		"SEP_1240_plasticity.ChangeOfWidth": {
 			"properties": {
 				"Property": {
-					"const": "Change of Width",
-					"type": "string"
+					"const": "Change of Width"
 				},
 				"Unit": {
-					"const": "mm",
-					"type": "string"
+					"const": "mm"
 				}
 			},
 			"required": [
@@ -351,8 +352,7 @@
 		"SEP_1240_plasticity.Displacement": {
 			"properties": {
 				"Property": {
-					"const": "Displacement",
-					"type": "string"
+					"const": "Displacement"
 				},
 				"Unit": {
 					"const": "mm",
@@ -372,12 +372,10 @@
 		"SEP_1240_plasticity.Force": {
 			"properties": {
 				"Property": {
-					"const": "Force",
-					"type": "string"
+					"const": "Force"
 				},
 				"Unit": {
-					"const": "N",
-					"type": "string"
+					"const": "N"
 				}
 			},
 			"required": [
@@ -393,12 +391,10 @@
 		"SEP_1240_plasticity.Strain": {
 			"properties": {
 				"Property": {
-					"const": "Strain",
-					"type": "string"
+					"const": "Strain"
 				},
 				"Unit": {
-					"const": "Strain epsilon",
-					"type": "string"
+					"const": "Strain epsilon"
 				},
 				"Value": {
 					"description": "Strain value with precision to 4 decimal places",
@@ -423,12 +419,10 @@
 		"SEP_1240_plasticity.Stress": {
 			"properties": {
 				"Property": {
-					"const": "Stress",
-					"type": "string"
+					"const": "Stress"
 				},
 				"Unit": {
-					"const": "MPa",
-					"type": "string"
+					"const": "MPa"
 				}
 			},
 			"required": [
@@ -446,12 +440,10 @@
 		"SEP_1240_plasticity.Time": {
 			"properties": {
 				"Property": {
-					"const": "Time",
-					"type": "string"
+					"const": "Time"
 				},
 				"Unit": {
-					"const": "s",
-					"type": "string"
+					"const": "s"
 				}
 			},
 			"required": [
@@ -543,8 +535,7 @@
 					"$ref": "#/$defs/Generic.Identifier"
 				},
 				"_type": {
-					"const": "InformationSet",
-					"type": "string"
+					"const": "InformationSet"
 				},
 				"ArraySpec": {
 					"items": {
@@ -587,8 +578,7 @@
 					"$ref": "#/$defs/Generic.Identifier"
 				},
 				"_type": {
-					"const": "TestSeries",
-					"type": "string"
+					"const": "TestSeries"
 				},
 				"Specification": {
 					"allOf": [
@@ -663,8 +653,6 @@
 					"items": {
 						"$ref": "#/$defs/SEP_1240_plasticity.ConsolidatedCharacteristicValue"
 					},
-					"maxItems" : 4,
-					"minItems": 4,
 					"type": "array"
 				}
 			},
@@ -687,8 +675,7 @@
 					"$ref": "#/$defs/Generic.Identifier"
 				},
 				"_type": {
-					"const": "TestExecution",
-					"type": "string"
+					"const": "TestExecution"
 				},
 				"Designation": {
 					"$ref": "#/$defs/Generic.RestrictedString"
@@ -709,18 +696,23 @@
 					"items": {
 						"$ref": "#/$defs/Generic.MeasurementSystem"
 					},
-					"type": "array"
+					"type": "array",
+					"minItems": 1
 				},
 				"RawData": {
 					"items": {
 						"$ref": "#/$defs/Generic.InformationSet"
 					},
-					"type": "array"
+					"type": "array",
+					"minItems": 1
 				},
 				"SingleResults": {
 					"type": "array",
+					"minItems": 4,
+			        "maxItems": 4,
+			        "uniqueItems": true,
 					"items": {
-						"anyOf": [
+						"prefixItems": [
 							{
 								"$ref": "#/$defs/SEP_1240_plasticity.YieldStrength"
 							},
@@ -748,10 +740,9 @@
 				"_type",
 				"Designation",
 				"Numerator",
-				"Specimen",
 				"MeasurementSystems",
-				"RawData",
-				"SingleResults"
+				"SingleResults",
+				"Specimen"
 			],
 			"type": "object"
 		},
@@ -829,8 +820,7 @@
 					"$ref": "#/$defs/Generic.RestrictedString"
 				},
 				"_type": {
-					"const": "Attachment",
-					"type": "string"
+					"const": "Attachment"
 				},
 				"Data": {
 					"$ref": "#/$defs/Generic.Base64Encoding"
@@ -859,11 +849,11 @@
 				"_id",
 				"_type",
 				"Data",
-				"FileName",
-				"MimeType",
+				"Designation",
 				"Encoding",
+				"FileName",
 				"Hashes",
-				"Designation"
+				"MimeType"
 			],
 			"type": "object"
 		},
@@ -880,8 +870,7 @@
 					"$ref": "#/$defs/Generic.Identifier"
 				},
 				"_type": {
-					"const": "Calibration",
-					"type": "string"
+					"const": "Calibration"
 				},
 				"Attachment": {
 					"$ref": "#/$defs/Generic.Attachment"
@@ -922,8 +911,8 @@
 			"required": [
 				"_id",
 				"_type",
-				"Specification",
-				"AccreditationDate"
+				"AccreditationDate",
+				"Specification"
 			],
 			"type": "object"
 		},
@@ -933,8 +922,7 @@
 					"$ref": "#/$defs/Generic.Identifier"
 				},
 				"_type": {
-					"const": "Component",
-					"type": "string"
+					"const": "Component"
 				},
 				"PartNumber": {
 					"$ref": "#/$defs/Generic.RestrictedString"
@@ -1037,8 +1025,7 @@
 							"$ref": "#/$defs/Generic.Identifier"
 						},
 						"_type": {
-							"const": "ConsolidatedCharacteristicValue",
-							"type": "string"
+							"const": "ConsolidatedCharacteristicValue"
 						},
 						"Aggregation": {
 							"$ref": "#/$defs/Generic.RestrictedString"
@@ -1073,8 +1060,7 @@
 					"$ref": "#/$defs/Generic.Identifier"
 				},
 				"_type": {
-					"const": "ContactDetails",
-					"type": "string"
+					"const": "ContactDetails"
 				},
 				"AdditionToAddress": {
 					"$ref": "#/$defs/Generic.RestrictedString"
@@ -1146,8 +1132,7 @@
 					"$ref": "#/$defs/Generic.Identifier"
 				},
 				"_type": {
-					"const": "Extraction",
-					"type": "string"
+					"const": "Extraction"
 				},
 				"Attachment": {
 					"$ref": "#/$defs/Generic.Attachment"
@@ -1273,8 +1258,7 @@
 					"$ref": "#/$defs/Generic.Identifier"
 				},
 				"_type": {
-					"const": "InformationSet",
-					"type": "string"
+					"const": "InformationSet"
 				},
 				"ArraySpec": {
 					"items": {
@@ -1343,8 +1327,7 @@
 					"$ref": "#/$defs/Generic.Identifier"
 				},
 				"_type": {
-					"const": "Location",
-					"type": "string"
+					"const": "Location"
 				},
 				"Address": {
 					"$ref": "#/$defs/Generic.ContactDetails"
@@ -1373,8 +1356,7 @@
 					"$ref": "#/$defs/Generic.Identifier"
 				},
 				"_type": {
-					"const": "ContactDetailsNative",
-					"type": "string"
+					"const": "ContactDetailsNative"
 				},
 				"Street": {
 					"$ref": "#/$defs/Generic.LongString"
@@ -1432,8 +1414,7 @@
 					"$ref": "#/$defs/Generic.Identifier"
 				},
 				"_type": {
-					"const": "MeasurementSystem",
-					"type": "string"
+					"const": "MeasurementSystem"
 				},
 				"Accuracy": {
 					"$ref": "#/$defs/Generic.InformationSet"
@@ -1464,8 +1445,9 @@
 				"_id",
 				"_type",
 				"Designation",
-				"SystemType",
-				"Location"
+				"Location",
+				"SystemType"
+				
 			],
 			"type": "object"
 		},
@@ -1499,8 +1481,7 @@
 					"$ref": "#/$defs/Generic.Identifier"
 				},
 				"_type": {
-					"const": "Person",
-					"type": "string"
+					"const": "Person"
 				},
 				"OrganizationIdentification": {
 					"$ref": "#/$defs/Generic.LocationIdentification"
@@ -1539,8 +1520,7 @@
 					"$ref": "#/$defs/Generic.Identifier"
 				},
 				"_type": {
-					"const": "ProcessStep",
-					"type": "string"
+					"const": "ProcessStep"
 				},
 				"Attachment": {
 					"$ref": "#/$defs/Generic.Attachment"
@@ -1622,8 +1602,8 @@
 			},
 			"required": [
 				"Property",
-				"Value",
-				"Unit"
+				"Unit",
+				"Value"
 			],
 			"type": "object"
 		},
@@ -1686,8 +1666,8 @@
 					}
 				}
 			],
-			"description": "A string with max length of 45, no leading or trailing whitespace, and only 7-bit ASCII characters",
-			"maxLength": 45,
+			"description": "A string with max length of 50, no leading or trailing whitespace, and only 7-bit ASCII characters",
+			"maxLength": 50,
 			"minLength": 0,
 			"pattern": "^[\\x20-\\x7E]*$",
 			"type": "string"
@@ -1703,8 +1683,7 @@
 							"$ref": "#/$defs/Generic.Identifier"
 						},
 						"_type": {
-							"const": "SingleResult",
-							"type": "string"
+							"const": "SingleResult"
 						},
 						"Attachment": {
 							"$ref": "#/$defs/Generic.Attachment"
@@ -1731,8 +1710,7 @@
 					"$ref": "#/$defs/Generic.Identifier"
 				},
 				"_type": {
-					"const": "Specimen",
-					"type": "string"
+					"const": "Specimen"
 				},
 				"AdditionalProperties": {
 					"$ref": "#/$defs/Generic.InformationSet"
@@ -1778,8 +1756,7 @@
 					"$ref": "#/$defs/Generic.Identifier"
 				},
 				"_type": {
-					"const": "TestExecution",
-					"type": "string"
+					"const": "TestExecution"
 				},
 				"Designation": {
 					"$ref": "#/$defs/Generic.RestrictedString"
@@ -1826,10 +1803,9 @@
 				"_type",
 				"Designation",
 				"Numerator",
-				"Specimen",
 				"MeasurementSystems",
-				"RawData",
-				"SingleResults"
+				"SingleResults",
+				"Specimen"
 			],
 			"type": "object"
 		},
@@ -1840,8 +1816,7 @@
 					"$ref": "#/$defs/Generic.Identifier"
 				},
 				"_type": {
-					"const": "TestingCenter",
-					"type": "string"
+					"const": "TestingCenter"
 				},
 				"Certifications": {
 					"items": {
@@ -1862,9 +1837,9 @@
 			"required": [
 				"_id",
 				"_type",
+				"Certifications",
 				"Location",
-				"TestingManager",
-				"Certifications"
+				"TestingManager"
 			],
 			"type": "object"
 		},
@@ -1882,8 +1857,7 @@
 					"$ref": "#/$defs/Generic.Identifier"
 				},
 				"_type": {
-					"const": "TestSeries",
-					"type": "string"
+					"const": "TestSeries"
 				},
 				"Specification": {
 					"$ref": "#/$defs/Generic.Specification"
@@ -2009,6 +1983,9 @@
 				},
 				{
 					"$ref": "#/$defs/Generic.NumberWithTolerance"
+				},
+				{
+					"$ref": "#/$defs/Generic.Date"
 				},
 				{
 					"description": "A null value",
