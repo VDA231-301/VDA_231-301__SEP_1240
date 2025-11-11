@@ -6,3 +6,9 @@
 - Example test report JSON: [VDA_231-301_Example_TensileTesting.json](./VDA_231-301_Example_TensileTesting.json)
 - Standard source: https://matplus.shop/product/sep-1240?lang=en
 - Version: 1.0.0
+
+# Purpose and intended use
+- The schema specifies the format in which data from test series should be documented. For example, the mapping of individual measured values from stress-strain curves. It can, for example, be a supplement if the documentation according to 3.1 certificate is not sufficient.
+
+# Attention
+- Part of the schema is not yet following the suggested branching. Still under construction.
