@@ -1,112 +1,62 @@
 {
-	"$id": "https://VDA_231-301_V1.0_Schema_SEP1240_plasticity.json",
+	"$id": "https://vda231-301.github.io/schemas/SEP_1240/VDA_231-301_Schema_SEP_1240_plasticity.json",
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"additionalProperties": false,
-	"description": "An exemplary sub-schema of VDA 231-301 for validating tensile test data according to SEP 1240 (Plasticity Tests). It introduces specific definitions for tensile curves and consolidated values under the prefix SEP_1240_plasticity, supporting multiple tests with raw data and results. The schema includes branching mechanisms for strict validation paths.",
-	"title": "VDA 231-301 Test Report – SEP 1240 Tensile Test Sub-Schema",
-	"_baseSchemaVersion": "0.0.2",
-	"type": "object",
-	"properties": {
-		"_schemaVersion": {
-			"const": "0.0.2",
-			"description": "The URL of the schema version that defines the structure of this test report."
+	"allOf": [
+		{
+			"$ref": "https://vda231-301.github.io/schemas/generic/VDA_231-301_generic_v0.2.0.schema.json"
 		},
-		"_id": {
-			"$ref": "#/$defs/Generic.Identifier"
-		},
-		"_type": {
-			"const": "TestReport"
-		},
-		"Client": {
-			"$ref": "#/$defs/Generic.Location"
-		},
-		"ClientOrderNumber": {
-			"$ref": "#/$defs/Generic.RestrictedString"
-		},
-		"Components": {
-			"items": {
-				"$ref": "#/$defs/Generic.Component"
-			},
-			"minItems": 1,
-			"type": "array"
-		},
-		"Contractor": {
-			"$ref": "#/$defs/Generic.TestingCenter"
-		},
-		"LaboratoryOrderNumber": {
-			"$ref": "#/$defs/Generic.RestrictedString"
-		},
-		"OrderDate": {
-			"$ref": "#/$defs/Generic.Date"
-		},
-		"OrderReference": {
-			"$ref": "#/$defs/Generic.RestrictedString"
-		},
-		"RemarkDeviation": {
-			"$ref": "#/$defs/Generic.LongString"
-		},
-		"RemarkInterpretations": {
-			"$ref": "#/$defs/Generic.LongString"
-		},
-		"RemarkValidity": {
-			"$ref": "#/$defs/Generic.LongString"
-		},
-		"ReportDate": {
-			"$ref": "#/$defs/Generic.Date"
-		},
-		"Signatory": {
-			"$ref": "#/$defs/Generic.ProperNameString"
-		},
-		"TestSeries": {
-			"type": "array",
-			"minItems": 1,
-			"items": {
-				"$ref": "#/$defs/SEP_1240_plasticity.BranchingTestSeries"
+		{
+			"properties": {
+				"TestSeries": {
+					"type": "array",
+					"minItems": 1,
+					"items": {
+						"$ref": "#/$defs/3-1_Certificate.BranchingTestSeries"
+					}
+				}
 			}
-		},
-		"Title": {
-			"$ref": "#/$defs/Generic.RestrictedString"
 		}
-	},
-	"required": [
-		"_schemaVersion",
-		"_id",
-		"_type",
-		"Client",
-		"ClientOrderNumber",
-		"Components",
-		"Contractor",
-		"LaboratoryOrderNumber",
-		"OrderDate",
-		"OrderReference",
-		"ReportDate",
-		"Signatory",
-		"TestSeries"
 	],
 	"$defs": {
-		"SEP_1240_plasticity.ConsolidatedCharacteristicValue": {
-			"type": "object",
-			"minItems": 4,
-			"maxItems": 4,
-			"uniqueItems": true,
-			"items": {
-				"prefixItems": [
-					{
-						"$ref": "#/$defs/SEP_1240_plasticity.YieldStrength"
-					},
-					{
-						"$ref": "#/$defs/SEP_1240_plasticity.TensileStrength"
-					},
-					{
-						"$ref": "#/$defs/SEP_1240_plasticity.ElongationA50"
-					},
-					{
-						"$ref": "#/$defs/SEP_1240_plasticity.UniformElongation"
+		"3-1_Certificate_Tensile.TestExecution": {
+			"properties": {
+				"_id": {
+					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.Identifier"
+				},
+				"_type": {
+					"const": "TestExecution"
+				},
+				"SingleResults": {
+					"type": "array",
+					"minItems": 4,
+					"maxItems": 4,
+					"uniqueItems": true,
+					"items": {
+						"oneOf": [
+							{
+								"$ref": "#/$defs/3-1_Certificate.YieldStrength"
+							},
+							{
+								"$ref": "#/$defs/3-1_Certificate.TensileStrength"
+							},
+							{
+								"$ref": "#/$defs/3-1_Certificate.ElongationA50"
+							},
+							{
+								"$ref": "#/$defs/3-1_Certificate.UniformElongation"
+							}
+						]
 					}
-				]
-			}
+				}
+			},
+			"required": [
+				"_id",
+				"_type",
+				"SingleResults"
+			],
+			"type": "object"
 		},
-		"SEP_1240_plasticity.TensileStrength": {
+		"3-1_Certificate.TensileStrength": {
 			"properties": {
 				"Property": {
 					"const": "Tensile Strength"
@@ -125,13 +75,13 @@
 					"type": "number"
 				},
 				"Rounding": {
-					"$ref": "#/$defs/Generic.RestrictedString"
+					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.RestrictedString"
 				},
 				"RoundingAccuracy": {
 					"type": "number"
 				},
 				"_id": {
-					"$ref": "#/$defs/Generic.Identifier"
+					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.Identifier"
 				},
 				"_type": {
 					"oneOf": [
@@ -139,28 +89,28 @@
 							"const": "ConsolidatedCharacteristicValue"
 						},
 						{
-							"const": "SingleResult"
+							"const": "SingleResultPoint"
 						}
 					],
 					"type": "string"
 				},
 				"Aggregation": {
-					"$ref": "#/$defs/Generic.RestrictedString"
+					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.RestrictedString"
 				},
 				"Comment": {
-					"$ref": "#/$defs/Generic.RestrictedString"
+					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.RestrictedString"
 				},
 				"CriterionType": {
-					"$ref": "#/$defs/Generic.RestrictedString"
+					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.RestrictedString"
 				}
 			},
 			"required": [
 				"Property",
-				"Unit"
+				"Value"
 			],
 			"type": "object"
 		},
-		"SEP_1240_plasticity.YieldStrength": {
+		"3-1_Certificate.YieldStrength": {
 			"properties": {
 				"Property": {
 					"const": "Yield Strength"
@@ -189,13 +139,13 @@
 					"type": "number"
 				},
 				"Rounding": {
-					"$ref": "#/$defs/Generic.RestrictedString"
+					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.RestrictedString"
 				},
 				"RoundingAccuracy": {
 					"type": "number"
 				},
 				"_id": {
-					"$ref": "#/$defs/Generic.Identifier"
+					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.Identifier"
 				},
 				"_type": {
 					"oneOf": [
@@ -203,28 +153,28 @@
 							"const": "ConsolidatedCharacteristicValue"
 						},
 						{
-							"const": "SingleResult"
+							"const": "SingleResultPoint"
 						}
 					],
 					"type": "string"
 				},
 				"Aggregation": {
-					"$ref": "#/$defs/Generic.RestrictedString"
+					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.RestrictedString"
 				},
 				"Comment": {
-					"$ref": "#/$defs/Generic.RestrictedString"
+					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.RestrictedString"
 				},
 				"CriterionType": {
-					"$ref": "#/$defs/Generic.RestrictedString"
+					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.RestrictedString"
 				}
 			},
 			"required": [
 				"Property",
-				"Unit"
+				"Value"
 			],
 			"type": "object"
 		},
-		"SEP_1240_plasticity.ElongationA50": {
+		"3-1_Certificate.ElongationA50": {
 			"properties": {
 				"Property": {
 					"const": "Elongation at Fracture"
@@ -242,13 +192,13 @@
 					"type": "number"
 				},
 				"Rounding": {
-					"$ref": "#/$defs/Generic.RestrictedString"
+					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.RestrictedString"
 				},
 				"RoundingAccuracy": {
 					"type": "number"
 				},
 				"_id": {
-					"$ref": "#/$defs/Generic.Identifier"
+					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.Identifier"
 				},
 				"_type": {
 					"oneOf": [
@@ -256,28 +206,28 @@
 							"const": "ConsolidatedCharacteristicValue"
 						},
 						{
-							"const": "SingleResult"
+							"const": "SingleResultPoint"
 						}
 					],
 					"type": "string"
 				},
 				"Aggregation": {
-					"$ref": "#/$defs/Generic.RestrictedString"
+					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.RestrictedString"
 				},
 				"Comment": {
-					"$ref": "#/$defs/Generic.RestrictedString"
+					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.RestrictedString"
 				},
 				"CriterionType": {
-					"$ref": "#/$defs/Generic.RestrictedString"
+					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.RestrictedString"
 				}
 			},
 			"required": [
 				"Property",
-				"Unit"
+				"Value"
 			],
 			"type": "object"
 		},
-		"SEP_1240_plasticity.UniformElongation": {
+		"3-1_Certificate.UniformElongation": {
 			"properties": {
 				"Property": {
 					"const": "Uniform Elongation"
@@ -295,13 +245,13 @@
 					"type": "number"
 				},
 				"Rounding": {
-					"$ref": "#/$defs/Generic.RestrictedString"
+					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.RestrictedString"
 				},
 				"RoundingAccuracy": {
 					"type": "number"
 				},
 				"_id": {
-					"$ref": "#/$defs/Generic.Identifier"
+					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.Identifier"
 				},
 				"_type": {
 					"oneOf": [
@@ -309,28 +259,28 @@
 							"const": "ConsolidatedCharacteristicValue"
 						},
 						{
-							"const": "SingleResult"
+							"const": "SingleResultPoint"
 						}
 					],
 					"type": "string"
 				},
 				"Aggregation": {
-					"$ref": "#/$defs/Generic.RestrictedString"
+					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.RestrictedString"
 				},
 				"Comment": {
-					"$ref": "#/$defs/Generic.RestrictedString"
+					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.RestrictedString"
 				},
 				"CriterionType": {
-					"$ref": "#/$defs/Generic.RestrictedString"
+					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.RestrictedString"
 				}
 			},
 			"required": [
 				"Property",
-				"Unit"
+				"Value"
 			],
 			"type": "object"
 		},
-		"SEP_1240_plasticity.ChangeOfWidth": {
+		"3-1_Certificate.ChangeOfWidth": {
 			"properties": {
 				"Property": {
 					"const": "Change of Width"
@@ -345,11 +295,11 @@
 			],
 			"type": "object"
 		},
-		"SEP_1240_plasticity.ChangeOfWidthValue": {
+		"3-1_Certificate.ChangeOfWidthValue": {
 			"description": "Change of Width value in millimeters",
 			"type": "number"
 		},
-		"SEP_1240_plasticity.Displacement": {
+		"3-1_Certificate.Displacement": {
 			"properties": {
 				"Property": {
 					"const": "Displacement"
@@ -365,11 +315,11 @@
 			],
 			"type": "object"
 		},
-		"SEP_1240_plasticity.DisplacementValue": {
+		"3-1_Certificate.DisplacementValue": {
 			"description": "Displacement value in millimeters",
 			"type": "number"
 		},
-		"SEP_1240_plasticity.Force": {
+		"3-1_Certificate.Force": {
 			"properties": {
 				"Property": {
 					"const": "Force"
@@ -384,11 +334,11 @@
 			],
 			"type": "object"
 		},
-		"SEP_1240_plasticity.ForceValue": {
+		"3-1_Certificate.ForceValue": {
 			"description": "Force value in Newtons",
 			"type": "number"
 		},
-		"SEP_1240_plasticity.Strain": {
+		"3-1_Certificate.Strain": {
 			"properties": {
 				"Property": {
 					"const": "Strain"
@@ -410,13 +360,13 @@
 			],
 			"type": "object"
 		},
-		"SEP_1240_plasticity.StrainValue": {
+		"3-1_Certificate.StrainValue": {
 			"description": "Strain value with precision to 4 decimal places",
 			"maximum": 1,
 			"minimum": 0,
 			"type": "number"
 		},
-		"SEP_1240_plasticity.Stress": {
+		"3-1_Certificate.Stress": {
 			"properties": {
 				"Property": {
 					"const": "Stress"
@@ -431,13 +381,13 @@
 			],
 			"type": "object"
 		},
-		"SEP_1240_plasticity.StressValue": {
+		"3-1_Certificate.StressValue": {
 			"description": "Stress value in MPa",
 			"maximum": 2000,
 			"minimum": 0,
 			"type": "number"
 		},
-		"SEP_1240_plasticity.Time": {
+		"3-1_Certificate.Time": {
 			"properties": {
 				"Property": {
 					"const": "Time"
@@ -452,61 +402,61 @@
 			],
 			"type": "object"
 		},
-		"SEP_1240_plasticity.TimeValue": {
+		"3-1_Certificate.TimeValue": {
 			"description": "Time in seconds with precision to 2 decimal places",
 			"maximum": 1000,
 			"minimum": 0,
 			"type": "number"
 		},
-		"SEP_1240_plasticity.ArraySpec": {
+		"3-1_Tensile_Certificate.ArraySpec": {
 			"description": "Specification of array structure for tensile testing data.",
 			"maxItems": 6,
 			"minItems": 6,
 			"prefixItems": [
 				{
-					"$ref": "#/$defs/SEP_1240_plasticity.Strain"
+					"$ref": "#/$defs/3-1_Certificate.Strain"
 				},
 				{
-					"$ref": "#/$defs/SEP_1240_plasticity.Stress"
+					"$ref": "#/$defs/3-1_Certificate.Stress"
 				},
 				{
-					"$ref": "#/$defs/SEP_1240_plasticity.Time"
+					"$ref": "#/$defs/3-1_Certificate.Time"
 				},
 				{
-					"$ref": "#/$defs/SEP_1240_plasticity.Force"
+					"$ref": "#/$defs/3-1_Certificate.Force"
 				},
 				{
-					"$ref": "#/$defs/SEP_1240_plasticity.Displacement"
+					"$ref": "#/$defs/3-1_Certificate.Displacement"
 				},
 				{
-					"$ref": "#/$defs/SEP_1240_plasticity.ChangeOfWidth"
+					"$ref": "#/$defs/3-1_Certificate.ChangeOfWidth"
 				}
 			],
 			"type": "object"
 		},
-		"SEP_1240_plasticity.ArrayValue": {
+		"3-1_Tensile_Certificate.ArrayValue": {
 			"description": "Values corresponding to the tensile testing data.",
 			"items": {
 				"maxItems": 6,
 				"minItems": 6,
 				"prefixItems": [
 					{
-						"$ref": "#/$defs/SEP_1240_plasticity.StrainValue"
+						"$ref": "#/$defs/3-1_Certificate.StrainValue"
 					},
 					{
-						"$ref": "#/$defs/SEP_1240_plasticity.StressValue"
+						"$ref": "#/$defs/3-1_Certificate.StressValue"
 					},
 					{
-						"$ref": "#/$defs/SEP_1240_plasticity.TimeValue"
+						"$ref": "#/$defs/3-1_Certificate.TimeValue"
 					},
 					{
-						"$ref": "#/$defs/SEP_1240_plasticity.ForceValue"
+						"$ref": "#/$defs/3-1_Certificate.ForceValue"
 					},
 					{
-						"$ref": "#/$defs/SEP_1240_plasticity.DisplacementValue"
+						"$ref": "#/$defs/3-1_Certificate.DisplacementValue"
 					},
 					{
-						"$ref": "#/$defs/SEP_1240_plasticity.ChangeOfWidthValue"
+						"$ref": "#/$defs/3-1_Certificate.ChangeOfWidthValue"
 					}
 				],
 				"type": "array"
@@ -515,7 +465,7 @@
 			"minItems": 1,
 			"type": "array"
 		},
-		"SEP_1240_plasticity.InformationSet": {
+		"3-1_Tensile_Certificate.InformationSet": {
 			"additionalProperties": false,
 			"anyOf": [
 				{
@@ -532,1467 +482,110 @@
 			],
 			"properties": {
 				"_id": {
-					"$ref": "#/$defs/Generic.Identifier"
+					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.Identifier"
 				},
 				"_type": {
 					"const": "InformationSet"
 				},
 				"ArraySpec": {
 					"items": {
-						"$ref": "#/$defs/SEP_1240_plasticity.ArraySpec"
+						"$ref": "#/$defs/3-1_Tensile_Certificate.ArraySpec"
 					},
 					"minItems": 1,
 					"type": "array"
 				},
 				"ArrayValue": {
 					"items": {
-						"$ref": "#/$defs/SEP_1240_plasticity.ArrayValue"
+						"$ref": "#/$defs/3-1_Tensile_Certificate.ArrayValue"
 					},
 					"minItems": 1,
 					"type": "array"
-				},
-				"Attachment": {
-					"$ref": "#/$defs/Generic.Attachment"
-				},
-				"Attributes": {
-					"items": {
-						"$ref": "#/$defs/Generic.InformationPoint",
-						"unevaluatedProperties": false
-					},
-					"minItems": 1,
-					"type": "array"
-				},
-				"Comment": {
-					"$ref": "#/$defs/Generic.LongString"
-				},
-				"Designation": {
-					"$ref": "#/$defs/Generic.RestrictedString"
 				}
 			},
 			"type": "object"
 		},
-		"SEP_1240_plasticity.TestSeries": {
-			"additionalProperties": false,
+		"3-1_Tensile_Certificate.TestSeries": {
 			"properties": {
 				"_id": {
-					"$ref": "#/$defs/Generic.Identifier"
+					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.Identifier"
 				},
 				"_type": {
 					"const": "TestSeries"
 				},
-				"Specification": {
-					"allOf": [
-						{
-							"$ref": "#/$defs/Generic.Specification"
-						},
-						{
-							"properties": {
-								"Type": {
-									"const": "SEP",
-									"type": "string"
-								},
-								"Number": {
-									"const": "1240",
-									"type": "string"
-								},
-								"IssueDate": {
-									"const": "2019-11",
-									"type": "string"
-								}
-							}
-						}
-					]
-				},
-				"TestType": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"AdditionalInformation": {
-					"$ref": "#/$defs/Generic.InformationSet",
-					"additionalProperties": false
-				},
-				"NumberOfExecutions": {
-					"minimum": 1,
-					"type": "integer"
-				},
-				"Assessment": {
-					"type": "string"
-				},
-				"PredecessorId": {
-					"oneOf": [
-						{
-							"$ref": "#/$defs/Generic.Identifier"
-						},
-						{
-							"type": "null"
-						}
-					]
-				},
-				"SuccessorId": {
-					"oneOf": [
-						{
-							"$ref": "#/$defs/Generic.Identifier"
-						},
-						{
-							"type": "null"
-						}
-					]
-				},
-				"TestingCenter": {
-					"$ref": "#/$defs/Generic.TestingCenter"
-				},
-				"Comment": {
-					"$ref": "#/$defs/Generic.RestrictedText"
-				},
 				"Executions": {
 					"items": {
-						"$ref": "#/$defs/SEP_1240_plasticity.TestExecution"
+						"$ref": "#/$defs/3-1_Certificate_Tensile.TestExecution"
 					},
 					"type": "array"
 				},
 				"ConsolidatedCharacteristicValues": {
-					"items": {
-						"$ref": "#/$defs/SEP_1240_plasticity.ConsolidatedCharacteristicValue"
-					},
-					"type": "array"
-				}
-			},
-			"required": [
-				"_id",
-				"_type",
-				"Specification",
-				"NumberOfExecutions",
-				"PredecessorId",
-				"SuccessorId",
-				"TestingCenter",
-				"ConsolidatedCharacteristicValues"
-			],
-			"type": "object"
-		},
-		"SEP_1240_plasticity.TestExecution": {
-			"additionalProperties": false,
-			"properties": {
-				"_id": {
-					"$ref": "#/$defs/Generic.Identifier"
-				},
-				"_type": {
-					"const": "TestExecution"
-				},
-				"Designation": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"Numerator": {
-					"minimum": 1,
-					"type": "integer"
-				},
-				"Tester": {
-					"$ref": "#/$defs/Generic.Person",
-					"description": "The person who executed the test."
-				},
-				"StartTime": {
-					"$ref": "#/$defs/Generic.Date",
-					"description": "The date the execution of the test began."
-				},
-				"MeasurementSystems": {
-					"items": {
-						"$ref": "#/$defs/Generic.MeasurementSystem"
-					},
-					"type": "array",
-					"minItems": 1
-				},
-				"RawData": {
-					"items": {
-						"$ref": "#/$defs/Generic.InformationSet"
-					},
-					"type": "array",
-					"minItems": 1
-				},
-				"SingleResults": {
 					"type": "array",
 					"minItems": 4,
-			        "maxItems": 4,
-			        "uniqueItems": true,
+					"maxItems": 4,
+					"uniqueItems": true,
 					"items": {
-						"prefixItems": [
+						"oneOf": [
 							{
-								"$ref": "#/$defs/SEP_1240_plasticity.YieldStrength"
+								"$ref": "#/$defs/3-1_Certificate.YieldStrength"
 							},
 							{
-								"$ref": "#/$defs/SEP_1240_plasticity.TensileStrength"
+								"$ref": "#/$defs/3-1_Certificate.TensileStrength"
 							},
 							{
-								"$ref": "#/$defs/SEP_1240_plasticity.ElongationA50"
+								"$ref": "#/$defs/3-1_Certificate.ElongationA50"
 							},
 							{
-								"$ref": "#/$defs/SEP_1240_plasticity.UniformElongation"
+								"$ref": "#/$defs/3-1_Certificate.UniformElongation"
 							}
 						]
 					}
 				},
-				"Specimen": {
-					"$ref": "#/$defs/Generic.Specimen"
-				},
-				"TestParameters": {
-					"$ref": "#/$defs/Generic.InformationSet"
-				}
-			},
-			"required": [
-				"_id",
-				"_type",
-				"Designation",
-				"Numerator",
-				"MeasurementSystems",
-				"SingleResults",
-				"Specimen"
-			],
-			"type": "object"
-		},
-		"SEP_1240_plasticity.BranchingTestSeries": {
-			"type": "object",
-			"if": {
-				"properties": {
-					"Specification": {
-						"type": "object",
-						"properties": {
-							"Type": {
-								"const": "SEP",
-								"type": "string"
+				"TargetCharacteristicValues": {
+					"type": "array",
+					"minItems": 4,
+					"maxItems": 4,
+					"uniqueItems": true,
+					"items": {
+						"oneOf": [
+							{
+								"$ref": "#/$defs/3-1_Certificate.YieldStrength"
 							},
-							"Number": {
-								"const": "1240",
-								"type": "string"
+							{
+								"$ref": "#/$defs/3-1_Certificate.TensileStrength"
+							},
+							{
+								"$ref": "#/$defs/3-1_Certificate.ElongationA50"
+							},
+							{
+								"$ref": "#/$defs/3-1_Certificate.UniformElongation"
 							}
-						}
+						]
 					}
 				}
 			},
-			"then": {
-				"$ref": "#/$defs/SEP_1240_plasticity.TestSeries"
-			},
-			"else": {
-				"$ref": "#/$defs/Generic.TestSeries"
-			}
-		},
-		"Generic.ArraySpec": {
-			"additionalProperties": false,
-			"properties": {
-				"MeasurementInaccuracy": {
-					"type": "number"
-				},
-				"Property": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"Rounding": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"RoundingAccuracy": {
-					"type": "number"
-				},
-				"Symbol": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"Unit": {
-					"$ref": "#/$defs/Generic.Unit"
-				},
-				"ValueResolution": {
-					"type": "number"
-				},
-				"ValueType": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				}
-			},
-			"required": [
-				"Property"
-			],
-			"type": "object"
-		},
-		"Generic.ArrayValue": {
-			"description": "An array that can contain strings, numbers, objects, arrays and null.",
-			"items": {
-				"$ref": "#/$defs/Generic.Value"
-			},
-			"minItems": 1,
-			"type": "array"
-		},
-		"Generic.Attachment": {
-			"additionalProperties": false,
-			"properties": {
-				"_id": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"_type": {
-					"const": "Attachment"
-				},
-				"Data": {
-					"$ref": "#/$defs/Generic.Base64Encoding"
-				},
-				"Designation": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"Encoding": {
-					"const": "base64",
-					"type": "string"
-				},
-				"FileName": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"Hashes": {
-					"items": {
-						"$ref": "#/$defs/Generic.Hash"
-					},
-					"type": "array"
-				},
-				"MimeType": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				}
-			},
 			"required": [
 				"_id",
 				"_type",
-				"Data",
-				"Designation",
-				"Encoding",
-				"FileName",
-				"Hashes",
-				"MimeType"
-			],
-			"type": "object"
-		},
-		"Generic.Base64Encoding": {
-			"description": "A Base64 encoded string.",
-			"example": "U29tZSBzYW1wbGUgZGF0YQ==",
-			"pattern": "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$",
-			"type": "string"
-		},
-		"Generic.Calibration": {
-			"additionalProperties": false,
-			"properties": {
-				"_id": {
-					"$ref": "#/$defs/Generic.Identifier"
-				},
-				"_type": {
-					"const": "Calibration"
-				},
-				"Attachment": {
-					"$ref": "#/$defs/Generic.Attachment"
-				},
-				"Date": {
-					"$ref": "#/$defs/Generic.Date"
-				},
-				"ValidUntil": {
-					"$ref": "#/$defs/Generic.Date"
-				}
-			},
-			"required": [
-				"_id",
-				"_type"
-			],
-			"type": "object"
-		},
-		"Generic.Certification": {
-			"additionalProperties": false,
-			"properties": {
-				"_id": {
-					"$ref": "#/$defs/Generic.Identifier"
-				},
-				"_type": {
-					"const": "Certification",
-					"type": "string"
-				},
-				"AccreditationDate": {
-					"$ref": "#/$defs/Generic.Date"
-				},
-				"Specification": {
-					"$ref": "#/$defs/Generic.Specification"
-				},
-				"ValidUntil": {
-					"$ref": "#/$defs/Generic.Date"
-				}
-			},
-			"required": [
-				"_id",
-				"_type",
-				"AccreditationDate",
-				"Specification"
-			],
-			"type": "object"
-		},
-		"Generic.Component": {
-			"properties": {
-				"_id": {
-					"$ref": "#/$defs/Generic.Identifier"
-				},
-				"_type": {
-					"const": "Component"
-				},
-				"PartNumber": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"Color": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"ProductionSite": {
-					"$ref": "#/$defs/Generic.Location"
-				},
-				"Machine": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"Tool": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"Cavity": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"SerialNumber": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"ProductionBatchNumber": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"ProductionDate": {
-					"$ref": "#/$defs/Generic.Date"
-				},
-				"MaterialGroup": {
-					"$ref": "#/$defs/Generic.RestrictedString",
-					"description": "According to VDA 231-106"
-				},
-				"MaterialClass": {
-					"$ref": "#/$defs/Generic.RestrictedString",
-					"description": "According to VDA 231-200"
-				},
-				"MaterialName": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"MaterialIdentifiers": {
-					"items": {
-						"$ref": "#/$defs/Generic.RestrictedString"
-					},
-					"type": "array",
-					"description": "According to VDA 231-300"
-				},
-				"SurfaceIdentifiers": {
-					"items": {
-						"$ref": "#/$defs/Generic.RestrictedString"
-					},
-					"type": "array",
-					"description": "According to VDA 231-300"
-				},
-				"Specifications": {
-					"items": {
-						"$ref": "#/$defs/Generic.Specification"
-					},
-					"type": "array",
-					"description": "A list of associated specifications regarding this component."
-				},
-				"LayerSequence": {
-					"$ref": "#/$defs/Generic.InformationSet"
-				},
-				"DateOfReceipt": {
-					"$ref": "#/$defs/Generic.Date"
-				},
-				"Attachments": {
-					"items": {
-						"$ref": "#/$defs/Generic.Attachment"
-					},
-					"type": "array"
-				},
-				"DeviationSpecificationText": {
-					"$ref": "#/$defs/Generic.RestrictedText",
-					"description": "The text describing allowed deviation from the specification."
-				},
-				"DeviationSpecificationCodeFile": {
-					"$ref": "#/$defs/Generic.Attachment",
-					"description": "The JSON file containing the deviation specification code."
-				},
-				"Comment": {
-					"$ref": "#/$defs/Generic.RestrictedText",
-					"description": "Additional information about the component."
-				}
-			},
-			"required": [
-				"_id",
-				"_type"
-			],
-			"type": "object"
-		},
-		"Generic.ConsolidatedCharacteristicValue": {
-			"allOf": [
-				{
-					"$ref": "#/$defs/Generic.InformationPoint"
-				},
-				{
-					"properties": {
-						"_id": {
-							"$ref": "#/$defs/Generic.Identifier"
-						},
-						"_type": {
-							"const": "ConsolidatedCharacteristicValue"
-						},
-						"Aggregation": {
-							"$ref": "#/$defs/Generic.RestrictedString"
-						},
-						"Attachment": {
-							"$ref": "#/$defs/Generic.Attachment"
-						},
-						"Comment": {
-							"type": [
-								"string",
-								"null"
-							]
-						},
-						"CriterionType": {
-							"$ref": "#/$defs/Generic.RestrictedString"
-						}
-					}
-				}
-			],
-			"required": [
-				"_id",
-				"_type",
-				"Aggregation"
-			],
-			"type": "object",
-			"unevaluatedProperties": false
-		},
-		"Generic.ContactDetails": {
-			"additionalProperties": false,
-			"properties": {
-				"_id": {
-					"$ref": "#/$defs/Generic.Identifier"
-				},
-				"_type": {
-					"const": "ContactDetails"
-				},
-				"AdditionToAddress": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"City": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"Country": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"EMail": {
-					"format": "email",
-					"type": "string"
-				},
-				"Fax": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"HouseNumber": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"Phone": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"StateRegion": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"Street": {
-					"$ref": "#/$defs/Generic.ProperNameString"
-				},
-				"ZipCode": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				}
-			},
-			"required": [
-				"_id",
-				"_type",
-				"Phone",
-				"EMail"
-			],
-			"type": "object"
-		},
-		"Generic.Date": {
-			"additionalProperties": false,
-			"properties": {
-				"Date": {
-					"description": "Date field that adheres to the ISO 8601 format (2000-02-01) or the European style (01.02.2000)",
-					"pattern": "^((\\d{4}-\\d{2}-\\d{2})|(\\d{2}\\.\\d{2}\\.\\d{4}))$",
-					"type": "string"
-				},
-				"Timestamp": {
-					"description": "Unix timestamp; time since January 1st 1970 UTC in seconds",
-					"type": "integer"
-				}
-			},
-			"required": [
-				"Date"
-			],
-			"type": "object"
-		},
-		"Generic.DateMonth": {
-			"description": "Date string that only stores year and month in the ISO 8601 format 'YYYY-MM'",
-			"pattern": "^\\d{4}-\\d{2}$",
-			"type": "string"
-		},
-		"Generic.Extraction": {
-			"additionalProperties": false,
-			"properties": {
-				"_id": {
-					"$ref": "#/$defs/Generic.Identifier"
-				},
-				"_type": {
-					"const": "Extraction"
-				},
-				"Attachment": {
-					"$ref": "#/$defs/Generic.Attachment"
-				},
-				"Date": {
-					"$ref": "#/$defs/Generic.Date"
-				},
-				"Method": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"Position": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"Specification": {
-					"$ref": "#/$defs/Generic.Specification"
-				},
-				"Comment": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				}
-			},
-			"required": [
-				"_id",
-				"_type",
-				"Method",
-				"Position",
-				"Specification"
-			],
-			"type": "object"
-		},
-		"Generic.Hash": {
-			"additionalProperties": false,
-			"properties": {
-				"Type": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"Value": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				}
-			},
-			"type": "object"
-		},
-		"Generic.Identifier": {
-			"description": "Universally Unique Identifier (UUID) as a 128-bit value in hexadecimal coding, noted in five groups, standardised by RFC 4122[1].",
-			"pattern": "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$",
-			"type": "string"
-		},
-		"Generic.InformationPoint": {
-			"properties": {
-				"LocalizedText": {
-					"$ref": "#/$defs/Generic.ProperNameString"
-				},
-				"MeasurementInaccuracy": {
-					"type": "number"
-				},
-				"Property": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"Rounding": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"RoundingAccuracy": {
-					"type": "number"
-				},
-				"Symbol": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"Unit": {
-					"$ref": "#/$defs/Generic.Unit"
-				},
-				"Value": {
-					"$ref": "#/$defs/Generic.Value"
-				},
-				"ValueResolution": {
-					"type": "number"
-				},
-				"ValueType": {
-					"oneOf": [
-						{
-							"const": "NumberWithTolerance"
-						},
-						{
-							"const": "Text"
-						},
-						{
-							"const": "Number"
-						},
-						{
-							"const": "List"
-						}
-					]
-				}
-			},
-			"required": [
-				"Property",
-				"Value"
-			],
-			"type": "object"
-		},
-		"Generic.InformationSet": {
-			"additionalProperties": false,
-			"anyOf": [
-				{
-					"required": [
-						"Attributes"
-					]
-				},
-				{
-					"required": [
-						"ArraySpec",
-						"ArrayValue"
-					]
-				}
-			],
-			"if": {
-				"properties": {
-					"Designation": {
-						"const": "Stress-strain curve"
-					}
-				}
-			},
-			"properties": {
-				"_id": {
-					"$ref": "#/$defs/Generic.Identifier"
-				},
-				"_type": {
-					"const": "InformationSet"
-				},
-				"ArraySpec": {
-					"items": {
-						"$ref": "#/$defs/Generic.ArraySpec"
-					},
-					"minItems": 1,
-					"type": "array"
-				},
-				"ArrayValue": {
-					"items": {
-						"$ref": "#/$defs/Generic.ArrayValue"
-					},
-					"minItems": 1,
-					"type": "array"
-				},
-				"Attachment": {
-					"$ref": "#/$defs/Generic.Attachment"
-				},
-				"Attributes": {
-					"items": {
-						"$ref": "#/$defs/Generic.InformationPoint",
-						"unevaluatedProperties": false
-					},
-					"minItems": 1,
-					"type": "array"
-				},
-				"Comment": {
-					"$ref": "#/$defs/Generic.LongString"
-				},
-				"Designation": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				}
-			},
-			"then": {
-				"$ref": "#/$defs/SEP_1240_plasticity.InformationSet"
-			},
-			"type": "object"
-		},
-		"Generic.LocationIdentification": {
-			"description": "One or more identifiers for a location.",
-			"type": "array",
-			"minItems": 1,
-			"items": {
-				"$ref": "#/$defs/Generic.LocationIdentifier"
-			}
-		},
-		"Generic.LocationIdentifier": {
-			"type": "object",
-			"properties": {
-				"Identifier": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"Type": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				}
-			},
-			"required": [
-				"Identifier",
-				"Type"
-			]
-		},
-		"Generic.Location": {
-			"additionalProperties": false,
-			"properties": {
-				"_id": {
-					"$ref": "#/$defs/Generic.Identifier"
-				},
-				"_type": {
-					"const": "Location"
-				},
-				"Address": {
-					"$ref": "#/$defs/Generic.ContactDetails"
-				},
-				"Identification": {
-					"$ref": "#/$defs/Generic.LocationIdentification"
-				},
-				"Name": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"AddressNativeLanguage": {
-					"$ref": "#/$defs/Generic.ContactDetailsNative"
-				}
-			},
-			"required": [
-				"_id",
-				"_type",
-				"Identification"
-			],
-			"type": "object"
-		},
-		"Generic.ContactDetailsNative": {
-			"additionalProperties": false,
-			"properties": {
-				"_id": {
-					"$ref": "#/$defs/Generic.Identifier"
-				},
-				"_type": {
-					"const": "ContactDetailsNative"
-				},
-				"Street": {
-					"$ref": "#/$defs/Generic.LongString"
-				},
-				"Street2": {
-					"$ref": "#/$defs/Generic.LongString"
-				},
-				"Street3": {
-					"$ref": "#/$defs/Generic.LongString"
-				},
-				"HouseNumber": {
-					"$ref": "#/$defs/Generic.LongString"
-				},
-				"AdditionToAddress": {
-					"$ref": "#/$defs/Generic.LongString"
-				},
-				"ZipCode": {
-					"$ref": "#/$defs/Generic.LongString"
-				},
-				"City": {
-					"$ref": "#/$defs/Generic.LongString"
-				},
-				"StateRegion": {
-					"$ref": "#/$defs/Generic.LongString"
-				},
-				"Country": {
-					"$ref": "#/$defs/Generic.LongString"
-				},
-				"EMail": {
-					"format": "email",
-					"type": "string"
-				},
-				"Fax": {
-					"$ref": "#/$defs/Generic.LongString"
-				},
-				"Phone": {
-					"$ref": "#/$defs/Generic.LongString"
-				}
-			},
-			"required": [
-				"_type"
-			],
-			"type": "object"
-		},
-		"Generic.LongString": {
-			"description": "A string with a maximum length of 240 and no leading or trailing whitespaces.",
-			"maxLength": 240,
-			"pattern": "^(?!\\s).*(?<!\\s)$",
-			"type": "string"
-		},
-		"Generic.MeasurementSystem": {
-			"additionalProperties": false,
-			"properties": {
-				"_id": {
-					"$ref": "#/$defs/Generic.Identifier"
-				},
-				"_type": {
-					"const": "MeasurementSystem"
-				},
-				"Accuracy": {
-					"$ref": "#/$defs/Generic.InformationSet"
-				},
-				"CalibrationData": {
-					"items": {
-						"$ref": "#/$defs/Generic.Calibration"
-					},
-					"type": "array"
-				},
-				"Designation": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"Location": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"MeasurementSetup": {
-					"$ref": "#/$defs/Generic.Attachment"
-				},
-				"Specification": {
-					"$ref": "#/$defs/Generic.Specification"
-				},
-				"SystemType": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				}
-			},
-			"required": [
-				"_id",
-				"_type",
-				"Designation",
-				"Location",
-				"SystemType"
-				
-			],
-			"type": "object"
-		},
-		"Generic.NumberWithTolerance": {
-			"prefixItems": [
-				{
-					"type": "number"
-				},
-				{
-					"properties": {
-						"MaxTolerance": {
-							"description": "The maximum tolerance value.",
-							"example": 0.5,
-							"type": "number"
-						},
-						"MinTolerance": {
-							"description": "The minimum tolerance value.",
-							"example": 0.1,
-							"type": "number"
-						}
-					},
-					"type": "object"
-				}
-			],
-			"type": "array"
-		},
-		"Generic.Person": {
-			"additionalProperties": false,
-			"properties": {
-				"_id": {
-					"$ref": "#/$defs/Generic.Identifier"
-				},
-				"_type": {
-					"const": "Person"
-				},
-				"OrganizationIdentification": {
-					"$ref": "#/$defs/Generic.LocationIdentification"
-				},
-				"EMail": {
-					"format": "email",
-					"type": "string"
-				},
-				"FirstName": {
-					"$ref": "#/$defs/Generic.ProperNameString"
-				},
-				"ID-Number": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"LastName": {
-					"$ref": "#/$defs/Generic.ProperNameString"
-				},
-				"MiddleName": {
-					"$ref": "#/$defs/Generic.ProperNameString"
-				},
-				"Title": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				}
-			},
-			"required": [
-				"_id",
-				"_type"
-			],
-			"type": "object"
-		},
-		"Generic.ProcessStep": {
-			"additionalProperties": false,
-			"description": "A schema representing a single step in a process, including its index and associated regulation.",
-			"properties": {
-				"_id": {
-					"$ref": "#/$defs/Generic.Identifier"
-				},
-				"_type": {
-					"const": "ProcessStep"
-				},
-				"Attachment": {
-					"$ref": "#/$defs/Generic.Attachment"
-				},
-				"Comment": {
-					"$ref": "#/$defs/Generic.LongString"
-				},
-				"Index": {
-					"description": "The sequential index of the process step.",
-					"example": 1,
-					"type": "integer"
-				},
-				"ProcessData": {
-					"$ref": "#/$defs/Generic.InformationSet",
-					"description": "The information set related to this process step."
-				},
-				"Specification": {
-					"$ref": "#/$defs/Generic.Specification",
-					"description": "The regulation associated with this process step."
-				}
-			},
-			"required": [
-				"_id",
-				"_type",
-				"Index"
-			],
-			"type": "object"
-		},
-		"Generic.ProperNameString": {
-			"allOf": [
-				{
-					"not": {
-						"pattern": "^\\s"
-					}
-				},
-				{
-					"not": {
-						"pattern": "\\s$"
-					}
-				}
-			],
-			"description": "A string with max length of 80, no leading or trailing whitespace, and only the Unicode code pages Basic Latin & Latin-1 Supplement",
-			"maxLength": 80,
-			"minLength": 0,
-			"pattern": "^[\\u0020-\\u00FF]*$",
-			"type": "string"
-		},
-		"Generic.PropertyWithTolerance": {
-			"additionalProperties": false,
-			"description": "A schema representing a property with its value, unit, and tolerance.",
-			"properties": {
-				"MaxTolerance": {
-					"description": "The maximum tolerance value.",
-					"example": 0.5,
-					"type": "number"
-				},
-				"MinTolerance": {
-					"description": "The minimum tolerance value.",
-					"example": 0.1,
-					"type": "number"
-				},
-				"Property": {
-					"$ref": "#/$defs/Generic.RestrictedString",
-					"description": "The name of the property."
-				},
-				"Unit": {
-					"$ref": "#/$defs/Generic.Unit",
-					"description": "The unit of measurement for the property value."
-				},
-				"Value": {
-					"description": "The value of the property.",
-					"example": 100.0,
-					"type": "number"
-				},
-				"ValueType": {
-					"$ref": "#/$defs/Generic.RestrictedString",
-					"description": "The type of the property value."
-				}
-			},
-			"required": [
-				"Property",
-				"Unit",
-				"Value"
-			],
-			"type": "object"
-		},
-		"Generic.Specification": {
-			"additionalProperties": false,
-			"properties": {
-				"Authority": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"DOI": {
-					"type": "string"
-				},
-				"FeatureText": {
-					"$ref": "#/$defs/Generic.LongString"
-				},
-				"FeatureList": {
-					"type": "array",
-					"items": {
-						"$ref": "#/$defs/Generic.RestrictedString"
-					},
-					"example": [
-						"23",
-						"R",
-						"6/4"
-					]
-				},
-				"IssueDate": {
-					"$ref": "#/$defs/Generic.DateMonth"
-				},
-				"Number": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"SubNumber": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"Title": {
-					"$ref": "#/$defs/Generic.LongString"
-				},
-				"Type": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				}
-			},
-			"required": [
-				"Type",
-				"Number",
-				"IssueDate"
-			],
-			"type": "object"
-		},
-		"Generic.RestrictedString": {
-			"allOf": [
-				{
-					"not": {
-						"pattern": "^\\s"
-					}
-				},
-				{
-					"not": {
-						"pattern": "\\s$"
-					}
-				}
-			],
-			"description": "A string with max length of 50, no leading or trailing whitespace, and only 7-bit ASCII characters",
-			"maxLength": 50,
-			"minLength": 0,
-			"pattern": "^[\\x20-\\x7E]*$",
-			"type": "string"
-		},
-		"Generic.SingleResult": {
-			"allOf": [
-				{
-					"$ref": "#/$defs/Generic.InformationPoint"
-				},
-				{
-					"properties": {
-						"_id": {
-							"$ref": "#/$defs/Generic.Identifier"
-						},
-						"_type": {
-							"const": "SingleResult"
-						},
-						"Attachment": {
-							"$ref": "#/$defs/Generic.Attachment"
-						},
-						"Comment": {
-							"type": [
-								"string",
-								"null"
-							]
-						},
-						"ConsolidatedValueID": {
-							"$ref": "#/$defs/Generic.Identifier"
-						}
-					}
-				}
-			],
-			"type": "object",
-			"unevaluatedProperties": false
-		},
-		"Generic.Specimen": {
-			"additionalProperties": false,
-			"properties": {
-				"_id": {
-					"$ref": "#/$defs/Generic.Identifier"
-				},
-				"_type": {
-					"const": "Specimen"
-				},
-				"AdditionalProperties": {
-					"$ref": "#/$defs/Generic.InformationSet"
-				},
-				"Attachment": {
-					"$ref": "#/$defs/Generic.Attachment"
-				},
-				"Comment": {
-					"$ref": "#/$defs/Generic.LongString"
-				},
-				"ComponentID": {
-					"$ref": "#/$defs/Generic.Identifier"
-				},
-				"Designation": {
-					"$ref": "#/$defs/Generic.LongString"
-				},
-				"Extraction": {
-					"$ref": "#/$defs/Generic.Extraction"
-				},
-				"Flagging": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"ProcessHistory": {
-					"description": "An array of processing steps.",
-					"items": {
-						"$ref": "#/$defs/Generic.ProcessStep"
-					},
-					"type": "array"
-				}
-			},
-			"required": [
-				"_id",
-				"_type",
-				"ComponentID",
-				"Designation"
-			],
-			"type": "object"
-		},
-		"Generic.TestExecution": {
-			"additionalProperties": false,
-			"properties": {
-				"_id": {
-					"$ref": "#/$defs/Generic.Identifier"
-				},
-				"_type": {
-					"const": "TestExecution"
-				},
-				"Designation": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"Numerator": {
-					"minimum": 1,
-					"type": "integer"
-				},
-				"Tester": {
-					"$ref": "#/$defs/Generic.Person",
-					"description": "The person who executed the test."
-				},
-				"StartTime": {
-					"$ref": "#/$defs/Generic.Date",
-					"description": "The date the execution of the test began."
-				},
-				"MeasurementSystems": {
-					"items": {
-						"$ref": "#/$defs/Generic.MeasurementSystem"
-					},
-					"type": "array"
-				},
-				"RawData": {
-					"items": {
-						"$ref": "#/$defs/Generic.InformationSet"
-					},
-					"type": "array"
-				},
-				"SingleResults": {
-					"items": {
-						"$ref": "#/$defs/Generic.SingleResult"
-					},
-					"type": "array"
-				},
-				"Specimen": {
-					"$ref": "#/$defs/Generic.Specimen"
-				},
-				"TestParameters": {
-					"$ref": "#/$defs/Generic.InformationSet"
-				}
-			},
-			"required": [
-				"_id",
-				"_type",
-				"Designation",
-				"Numerator",
-				"MeasurementSystems",
-				"SingleResults",
-				"Specimen"
-			],
-			"type": "object"
-		},
-		"Generic.TestingCenter": {
-			"additionalProperties": false,
-			"properties": {
-				"_id": {
-					"$ref": "#/$defs/Generic.Identifier"
-				},
-				"_type": {
-					"const": "TestingCenter"
-				},
-				"Certifications": {
-					"items": {
-						"$ref": "#/$defs/Generic.Certification"
-					},
-					"type": "array"
-				},
-				"Location": {
-					"$ref": "#/$defs/Generic.Location"
-				},
-				"TestingManager": {
-					"$ref": "#/$defs/Generic.Person"
-				},
-				"VatId": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				}
-			},
-			"required": [
-				"_id",
-				"_type",
-				"Certifications",
-				"Location",
-				"TestingManager"
-			],
-			"type": "object"
-		},
-		"Generic.RestrictedText": {
-			"description": "A string with max length of 1000 and only 7-bit ASCII characters",
-			"maxLength": 1000,
-			"minLength": 0,
-			"pattern": "^[\\x20-\\x7E]*$",
-			"type": "string"
-		},
-		"Generic.TestSeries": {
-			"additionalProperties": false,
-			"properties": {
-				"_id": {
-					"$ref": "#/$defs/Generic.Identifier"
-				},
-				"_type": {
-					"const": "TestSeries"
-				},
-				"Specification": {
-					"$ref": "#/$defs/Generic.Specification"
-				},
-				"TestType": {
-					"$ref": "#/$defs/Generic.RestrictedString"
-				},
-				"AdditionalInformation": {
-					"$ref": "#/$defs/Generic.InformationSet",
-					"additionalProperties": false
-				},
-				"NumberOfExecutions": {
-					"minimum": 1,
-					"type": "integer"
-				},
-				"Assessment": {
-					"type": "string"
-				},
-				"PredecessorId": {
-					"oneOf": [
-						{
-							"$ref": "#/$defs/Generic.Identifier"
-						},
-						{
-							"type": "null"
-						}
-					]
-				},
-				"SuccessorId": {
-					"oneOf": [
-						{
-							"$ref": "#/$defs/Generic.Identifier"
-						},
-						{
-							"type": "null"
-						}
-					]
-				},
-				"TestingCenter": {
-					"$ref": "#/$defs/Generic.TestingCenter"
-				},
-				"Comment": {
-					"$ref": "#/$defs/Generic.RestrictedText"
-				},
-				"Executions": {
-					"items": {
-						"$ref": "#/$defs/Generic.TestExecution"
-					},
-					"type": "array"
-				},
-				"ConsolidatedCharacteristicValues": {
-					"items": {
-						"$ref": "#/$defs/Generic.ConsolidatedCharacteristicValue"
-					},
-					"minItems": 1,
-					"type": "array"
-				}
-			},
-			"required": [
-				"_id",
-				"_type",
-				"Specification",
-				"NumberOfExecutions",
-				"PredecessorId",
-				"SuccessorId",
-				"TestingCenter",
+				"Executions",
 				"ConsolidatedCharacteristicValues"
 			],
 			"type": "object"
 		},
-		"Generic.Unit": {
-			"allOf": [
-				{
-					"not": {
-						"pattern": "^\\s"
-					}
-				},
-				{
-					"not": {
-						"pattern": "\\s$"
+		"3-1_Certificate.BranchingTestSeries": {
+			"type": "object",
+			"if": {
+				"properties": {
+					"TestType": {
+						"const": "Optical Emission Spectroscopy"
 					}
 				}
-			],
-			"description": "A string with max length of 20, no leading or trailing whitespace, and only 7-bit ASCII characters plus Ω and µ",
-			"examples": [
-				"Ω",
-				"µg*m^-3"
-			],
-			"maxLength": 20,
-			"minLength": 0,
-			"pattern": "^[°Ωµ\\x20-\\x7E]*$",
-			"type": "string"
-		},
-		"Generic.Value": {
-			"anyOf": [
-				{
-					"description": "A string value.",
-					"example": "example string",
-					"type": "string"
-				},
-				{
-					"description": "A numerical value.",
-					"example": 42,
-					"type": "number"
-				},
-				{
-					"description": "An object value.",
-					"example": {
-						"key": "value"
-					},
-					"type": "object"
-				},
-				{
-					"description": "A boolean value.",
-					"type": "boolean"
-				},
-				{
-					"description": "An array of values",
-					"items": {
-						"$ref": "#/$defs/Generic.Value"
-					},
-					"type": "array"
-				},
-				{
-					"$ref": "#/$defs/Generic.NumberWithTolerance"
-				},
-				{
-					"$ref": "#/$defs/Generic.Date"
-				},
-				{
-					"description": "A null value",
-					"type": "null"
-				}
-			],
-			"description": "A generic value. Specific sub-schemas may restrict the type of the value."
+			},
+			"then": {
+				"$ref": "#/$defs/3-1_Tensile_Certificate.TestSeries"
+			},
+			"else": {
+				"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.TestSeries"
+			}
 		}
 	}
 }
