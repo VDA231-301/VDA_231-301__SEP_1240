@@ -1,7 +1,7 @@
 {
 	"_id": "00000000-63ef-a8d9-63dc-65a5b4c34f6e",
 	"_type": "TestingProject",
-	"_schemaVersion": "0.2.0",
+	"_schemaVersion": "1.0.0",
 	"Signatory": "My signature",
 	"Title": "Test Name",
 	"Client": {

@@ -3,7 +3,7 @@
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"allOf": [
 		{
-			"$ref": "https://vda231-301.github.io/schemas/generic/VDA_231-301_generic_v0.2.0.schema.json"
+			"$ref": "https://vda231-301.github.io/schemas/generic/VDA_231-301_generic_v1.0.0.schema.json"
 		},
 		{
 			"properties": {
@@ -21,7 +21,7 @@
 		"3-1_Certificate_Tensile.TestExecution": {
 			"properties": {
 				"_id": {
-					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.Identifier"
+					"$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.Identifier"
 				},
 				"_type": {
 					"const": "TestExecution"
@@ -75,13 +75,13 @@
 					"type": "number"
 				},
 				"Rounding": {
-					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.RestrictedString"
+					"$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.RestrictedString"
 				},
 				"RoundingAccuracy": {
 					"type": "number"
 				},
 				"_id": {
-					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.Identifier"
+					"$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.Identifier"
 				},
 				"_type": {
 					"oneOf": [
@@ -95,13 +95,13 @@
 					"type": "string"
 				},
 				"Aggregation": {
-					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.RestrictedString"
+					"$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.RestrictedString"
 				},
 				"Comment": {
-					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.RestrictedString"
+					"$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.RestrictedString"
 				},
 				"CriterionType": {
-					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.RestrictedString"
+					"$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.RestrictedString"
 				}
 			},
 			"required": [
@@ -139,13 +139,13 @@
 					"type": "number"
 				},
 				"Rounding": {
-					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.RestrictedString"
+					"$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.RestrictedString"
 				},
 				"RoundingAccuracy": {
 					"type": "number"
 				},
 				"_id": {
-					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.Identifier"
+					"$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.Identifier"
 				},
 				"_type": {
 					"oneOf": [
@@ -159,13 +159,13 @@
 					"type": "string"
 				},
 				"Aggregation": {
-					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.RestrictedString"
+					"$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.RestrictedString"
 				},
 				"Comment": {
-					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.RestrictedString"
+					"$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.RestrictedString"
 				},
 				"CriterionType": {
-					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.RestrictedString"
+					"$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.RestrictedString"
 				}
 			},
 			"required": [
@@ -192,13 +192,13 @@
 					"type": "number"
 				},
 				"Rounding": {
-					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.RestrictedString"
+					"$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.RestrictedString"
 				},
 				"RoundingAccuracy": {
 					"type": "number"
 				},
 				"_id": {
-					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.Identifier"
+					"$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.Identifier"
 				},
 				"_type": {
 					"oneOf": [
@@ -212,13 +212,13 @@
 					"type": "string"
 				},
 				"Aggregation": {
-					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.RestrictedString"
+					"$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.RestrictedString"
 				},
 				"Comment": {
-					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.RestrictedString"
+					"$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.RestrictedString"
 				},
 				"CriterionType": {
-					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.RestrictedString"
+					"$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.RestrictedString"
 				}
 			},
 			"required": [
@@ -245,13 +245,13 @@
 					"type": "number"
 				},
 				"Rounding": {
-					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.RestrictedString"
+					"$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.RestrictedString"
 				},
 				"RoundingAccuracy": {
 					"type": "number"
 				},
 				"_id": {
-					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.Identifier"
+					"$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.Identifier"
 				},
 				"_type": {
 					"oneOf": [
@@ -265,13 +265,13 @@
 					"type": "string"
 				},
 				"Aggregation": {
-					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.RestrictedString"
+					"$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.RestrictedString"
 				},
 				"Comment": {
-					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.RestrictedString"
+					"$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.RestrictedString"
 				},
 				"CriterionType": {
-					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.RestrictedString"
+					"$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.RestrictedString"
 				}
 			},
 			"required": [
@@ -482,7 +482,7 @@
 			],
 			"properties": {
 				"_id": {
-					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.Identifier"
+					"$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.Identifier"
 				},
 				"_type": {
 					"const": "InformationSet"
@@ -507,7 +507,7 @@
 		"3-1_Tensile_Certificate.TestSeries": {
 			"properties": {
 				"_id": {
-					"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.Identifier"
+					"$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.Identifier"
 				},
 				"_type": {
 					"const": "TestSeries"
@@ -584,7 +584,7 @@
 				"$ref": "#/$defs/3-1_Tensile_Certificate.TestSeries"
 			},
 			"else": {
-				"$ref": "../generic/VDA_231-301_generic_v0.2.0.schema.json#/$defs/Generic.TestSeries"
+				"$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.TestSeries"
 			}
 		}
 	}
