@@ -97,9 +97,27 @@ These examples are provided for **illustration and implementation support only**
 
 ---
 
-## License and Contribution
+## License 
 
 The VDA 231‑301 JSON schemas, including this SEP 1240 subschema, are released under the **MIT License**, allowing free use, modification, and distribution.
 
-Contributions are welcome.  
+
+## Contributing & VDA Process
+
+Contributions are welcome. 
+
 Any changes intended to become part of the official VDA recommendation must follow the formal VDA committee and release process.
+
+This repository hosts a subschema extending the generic VDA 231‑301 JSON schema.
+
+GitHub is used as a platform for collaborative drafting, discussion, and technical refinement.  
+Issues and Pull Requests are welcome.
+
+⚠️ Please note:  
+Only subschemas that have successfully passed the formal VDA committee and release process may become part of the official VDA 231‑301 recommendation.
+
+Details on contribution rules, governance, and approval processes are described in the organization-wide Contributing Guidelines:  
+https://github.com/VDA231-301/.github/blob/main/CONTRIBUTING.md
+
+
+
