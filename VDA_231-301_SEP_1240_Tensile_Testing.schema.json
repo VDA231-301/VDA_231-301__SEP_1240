@@ -1,62 +1,1450 @@
 {
-  "$id": "https://vda231-301.github.io/schemas/SEP_1240/VDA_231-301_SEP_1240_Tensile_Testing_v2.0.0.schema.json",
+  "$id": "https://vda231-301.github.io/schemas/SEP_1240/VDA_231-301_SEP_1240_Tensile_Testing_v3.0.0.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VDA 231-301 testing project JSON schema for SEP 1240 (2nd edition, 2026-01) tensile testing",
+  "description": "Sub-schema of the VDA 231-301 generic schema v3.0.0 (currently referenced as the published v3.0.0-beta.1) for quasi-static tensile tests at constant strain rate according to SEP 1240 'Testing and Documentation Guideline for the Experimental Determination of Mechanical Properties of Steel Sheets for CAE-Calculations', 2nd edition, January 2026, clause 5. A testing project that validates against this schema contains at least one such test series. Documents should additionally be validated against the generic schema.",
+  "type": "object",
   "allOf": [
     {
-      "$ref": "https://vda231-301.github.io/schemas/generic/VDA_231-301_generic_v1.0.0.schema.json"
+      "$ref": "https://vda231-301.github.io/schemas/generic/VDA_231-301_generic_v3.0.0-beta.1.schema.json"
     },
     {
+      "type": "object",
       "properties": {
-        "TestSeries": {
-          "type": "array",
-          "minItems": 1,
-          "items": {
-            "$ref": "#/$defs/3-1_Certificate.BranchingTestSeries"
-          }
-        }
-      }
-    }
-  ],
-  "$defs": {
-    "3-1_Certificate_Tensile.TestExecution": {
-      "properties": {
-        "_id": {
-          "$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.Identifier"
-        },
         "_type": {
-          "const": "TestExecution"
+          "const": "TestingProject"
         },
-        "SingleResults": {
+        "Topics": {
           "type": "array",
-          "minItems": 4,
-          "maxItems": 4,
-          "uniqueItems": true,
           "items": {
-            "oneOf": [
-              {
-                "$ref": "#/$defs/3-1_Certificate.YieldStrength"
-              },
-              {
-                "$ref": "#/$defs/3-1_Certificate.TensileStrength"
-              },
-              {
-                "$ref": "#/$defs/3-1_Certificate.ElongationA50"
-              },
-              {
-                "$ref": "#/$defs/3-1_Certificate.UniformElongation"
-              }
-            ]
+            "type": "object",
+            "if": {
+              "$ref": "#/$defs/SEP1240.TestSeriesCondition"
+            },
+            "then": {
+              "$ref": "#/$defs/SEP1240.TestSeries"
+            }
+          },
+          "contains": {
+            "$ref": "#/$defs/SEP1240.TestSeriesCondition"
           }
         }
       },
       "required": [
         "_id",
         "_type",
-        "SingleResults"
-      ],
-      "type": "object"
+        "_schemaVersion",
+        "ClientOrderNumber",
+        "LaboratoryOrderNumber",
+        "OrderReference",
+        "OrderDate",
+        "ReportDate",
+        "Signatory",
+        "Client",
+        "ContractorID",
+        "TestingCenters",
+        "ComponentMasters",
+        "Topics"
+      ]
+    }
+  ],
+  "$defs": {
+    "SEP1240.TestSeriesCondition": {
+      "type": "object",
+      "description": "Identifies a topic as a test series according to SEP 1240, 2nd edition (January 2026).",
+      "properties": {
+        "_type": {
+          "const": "TestSeries"
+        },
+        "Specification": {
+          "type": "object",
+          "properties": {
+            "Type": {
+              "const": "SEP"
+            },
+            "Number": {
+              "const": "1240"
+            },
+            "IssueDate": {
+              "const": "2026-01"
+            }
+          },
+          "required": [
+            "Type",
+            "Number",
+            "IssueDate"
+          ]
+        }
+      },
+      "required": [
+        "_type",
+        "Specification"
+      ]
     },
-    "3-1_Certificate.TensileStrength": {
+    "SEP1240.TestSeries": {
+      "type": "object",
+      "description": "Quasi-static tensile test at constant strain rate for the determination of plastic properties and flow curves (SEP 1240:2026-01, clause 5).",
+      "properties": {
+        "_type": {
+          "const": "TestSeries"
+        },
+        "TestType": {
+          "const": "Tensile testing"
+        },
+        "NumberOfExecutions": {
+          "enum": [
+            3,
+            5
+          ],
+          "description": "Three valid tests; if the results deviate by more than 5 %, two additional tests (SEP 1240:2026-01, 5.6)."
+        },
+        "Specimens": {
+          "type": "array",
+          "minItems": 3
+        },
+        "Executions": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 5,
+          "items": {
+            "$ref": "#/$defs/SEP1240.TestExecution"
+          }
+        },
+        "ReportedProperties": {
+          "$ref": "#/$defs/SEP1240.ReportedProperties"
+        },
+        "TargetProperties": {
+          "$ref": "#/$defs/SEP1240.TargetProperties"
+        }
+      },
+      "required": [
+        "Specification",
+        "TestType",
+        "ComponentMasterID",
+        "NumberOfExecutions",
+        "TestingCenterID",
+        "Specimens",
+        "Executions",
+        "ReportedProperties"
+      ]
+    },
+    "SEP1240.TestExecution": {
+      "type": "object",
+      "description": "One tensile test on one specimen.",
+      "properties": {
+        "MeasurementSystems": {
+          "type": "array",
+          "minItems": 1,
+          "description": "Test machine, transducers for elongation and force, clamping, closed-loop control and data recording (SEP 1240:2026-01, 4.2)."
+        },
+        "TestParameters": {
+          "$ref": "#/$defs/SEP1240.TestParameters"
+        },
+        "SingleResults": {
+          "$ref": "#/$defs/SEP1240.SingleResults"
+        },
+        "RawData": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "allOf": [
+              {
+                "if": {
+                  "type": "object",
+                  "properties": {
+                    "Designation": {
+                      "const": "Raw data"
+                    }
+                  },
+                  "required": [
+                    "Designation"
+                  ]
+                },
+                "then": {
+                  "$ref": "#/$defs/SEP1240.RawData"
+                }
+              },
+              {
+                "if": {
+                  "type": "object",
+                  "properties": {
+                    "Designation": {
+                      "const": "Engineering stress-strain curve"
+                    }
+                  },
+                  "required": [
+                    "Designation"
+                  ]
+                },
+                "then": {
+                  "$ref": "#/$defs/SEP1240.EngineeringStressStrainCurve"
+                }
+              },
+              {
+                "if": {
+                  "type": "object",
+                  "properties": {
+                    "Designation": {
+                      "const": "Flow curve"
+                    }
+                  },
+                  "required": [
+                    "Designation"
+                  ]
+                },
+                "then": {
+                  "$ref": "#/$defs/SEP1240.FlowCurve"
+                }
+              }
+            ]
+          },
+          "allOf": [
+            {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "Designation": {
+                    "const": "Raw data"
+                  }
+                },
+                "required": [
+                  "Designation"
+                ]
+              },
+              "minContains": 1,
+              "maxContains": 1
+            },
+            {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "Designation": {
+                    "const": "Engineering stress-strain curve"
+                  }
+                },
+                "required": [
+                  "Designation"
+                ]
+              },
+              "minContains": 0,
+              "maxContains": 1
+            },
+            {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "Designation": {
+                    "const": "Flow curve"
+                  }
+                },
+                "required": [
+                  "Designation"
+                ]
+              },
+              "minContains": 0,
+              "maxContains": 1
+            }
+          ]
+        }
+      },
+      "required": [
+        "SpecimenID",
+        "MeasurementSystems",
+        "TestParameters",
+        "SingleResults",
+        "RawData"
+      ]
+    },
+    "SEP1240.TestParameters": {
+      "type": "object",
+      "properties": {
+        "_type": {
+          "const": "InformationSet"
+        },
+        "Attributes": {
+          "type": "array",
+          "items": {
+            "allOf": [
+              {
+                "if": {
+                  "type": "object",
+                  "properties": {
+                    "Property": {
+                      "const": "SPECIMEN_GEOMETRY"
+                    }
+                  },
+                  "required": [
+                    "Property"
+                  ]
+                },
+                "then": {
+                  "$ref": "#/$defs/SEP1240.TestParameter.SPECIMEN_GEOMETRY"
+                }
+              },
+              {
+                "if": {
+                  "type": "object",
+                  "properties": {
+                    "Property": {
+                      "const": "SPECIMEN_ORIENTATION"
+                    }
+                  },
+                  "required": [
+                    "Property"
+                  ]
+                },
+                "then": {
+                  "$ref": "#/$defs/SEP1240.TestParameter.SPECIMEN_ORIENTATION"
+                }
+              },
+              {
+                "if": {
+                  "type": "object",
+                  "properties": {
+                    "Property": {
+                      "const": "PREDEFORMATION_NOMINAL"
+                    }
+                  },
+                  "required": [
+                    "Property"
+                  ]
+                },
+                "then": {
+                  "$ref": "#/$defs/SEP1240.TestParameter.PREDEFORMATION_NOMINAL"
+                }
+              },
+              {
+                "if": {
+                  "type": "object",
+                  "properties": {
+                    "Property": {
+                      "const": "PREDEFORMATION_ACTUAL"
+                    }
+                  },
+                  "required": [
+                    "Property"
+                  ]
+                },
+                "then": {
+                  "$ref": "#/$defs/SEP1240.TestParameter.PREDEFORMATION_ACTUAL"
+                }
+              },
+              {
+                "if": {
+                  "type": "object",
+                  "properties": {
+                    "Property": {
+                      "const": "PREDEFORMATION_DIRECTION"
+                    }
+                  },
+                  "required": [
+                    "Property"
+                  ]
+                },
+                "then": {
+                  "$ref": "#/$defs/SEP1240.TestParameter.PREDEFORMATION_DIRECTION"
+                }
+              },
+              {
+                "if": {
+                  "type": "object",
+                  "properties": {
+                    "Property": {
+                      "const": "HEAT_TREATMENT"
+                    }
+                  },
+                  "required": [
+                    "Property"
+                  ]
+                },
+                "then": {
+                  "$ref": "#/$defs/SEP1240.TestParameter.HEAT_TREATMENT"
+                }
+              },
+              {
+                "if": {
+                  "type": "object",
+                  "properties": {
+                    "Property": {
+                      "const": "SPECIMEN_WIDTH_ACTUAL"
+                    }
+                  },
+                  "required": [
+                    "Property"
+                  ]
+                },
+                "then": {
+                  "$ref": "#/$defs/SEP1240.TestParameter.SPECIMEN_WIDTH_ACTUAL"
+                }
+              },
+              {
+                "if": {
+                  "type": "object",
+                  "properties": {
+                    "Property": {
+                      "const": "SPECIMEN_THICKNESS_ACTUAL"
+                    }
+                  },
+                  "required": [
+                    "Property"
+                  ]
+                },
+                "then": {
+                  "$ref": "#/$defs/SEP1240.TestParameter.SPECIMEN_THICKNESS_ACTUAL"
+                }
+              },
+              {
+                "if": {
+                  "type": "object",
+                  "properties": {
+                    "Property": {
+                      "const": "GAUGE_LENGTH_ACTUAL"
+                    }
+                  },
+                  "required": [
+                    "Property"
+                  ]
+                },
+                "then": {
+                  "$ref": "#/$defs/SEP1240.TestParameter.GAUGE_LENGTH_ACTUAL"
+                }
+              },
+              {
+                "if": {
+                  "type": "object",
+                  "properties": {
+                    "Property": {
+                      "const": "TEST_TEMPERATURE_NOMINAL"
+                    }
+                  },
+                  "required": [
+                    "Property"
+                  ]
+                },
+                "then": {
+                  "$ref": "#/$defs/SEP1240.TestParameter.TEST_TEMPERATURE_NOMINAL"
+                }
+              },
+              {
+                "if": {
+                  "type": "object",
+                  "properties": {
+                    "Property": {
+                      "const": "TEST_SPEED_NOMINAL"
+                    }
+                  },
+                  "required": [
+                    "Property"
+                  ]
+                },
+                "then": {
+                  "$ref": "#/$defs/SEP1240.TestParameter.TEST_SPEED_NOMINAL"
+                }
+              },
+              {
+                "if": {
+                  "type": "object",
+                  "properties": {
+                    "Property": {
+                      "const": "TEST_SPEED_ACTUAL"
+                    }
+                  },
+                  "required": [
+                    "Property"
+                  ]
+                },
+                "then": {
+                  "$ref": "#/$defs/SEP1240.TestParameter.TEST_SPEED_ACTUAL"
+                }
+              },
+              {
+                "if": {
+                  "type": "object",
+                  "properties": {
+                    "Property": {
+                      "const": "STRAIN_RATE_NOMINAL"
+                    }
+                  },
+                  "required": [
+                    "Property"
+                  ]
+                },
+                "then": {
+                  "$ref": "#/$defs/SEP1240.TestParameter.STRAIN_RATE_NOMINAL"
+                }
+              },
+              {
+                "if": {
+                  "type": "object",
+                  "properties": {
+                    "Property": {
+                      "const": "STRAIN_RATE_ACTUAL"
+                    }
+                  },
+                  "required": [
+                    "Property"
+                  ]
+                },
+                "then": {
+                  "$ref": "#/$defs/SEP1240.TestParameter.STRAIN_RATE_ACTUAL"
+                }
+              }
+            ]
+          },
+          "allOf": [
+            {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "Property": {
+                    "const": "SPECIMEN_GEOMETRY"
+                  }
+                },
+                "required": [
+                  "Property"
+                ]
+              },
+              "minContains": 0,
+              "maxContains": 1
+            },
+            {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "Property": {
+                    "const": "SPECIMEN_ORIENTATION"
+                  }
+                },
+                "required": [
+                  "Property"
+                ]
+              },
+              "minContains": 0,
+              "maxContains": 1
+            },
+            {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "Property": {
+                    "const": "PREDEFORMATION_NOMINAL"
+                  }
+                },
+                "required": [
+                  "Property"
+                ]
+              },
+              "minContains": 0,
+              "maxContains": 1
+            },
+            {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "Property": {
+                    "const": "PREDEFORMATION_ACTUAL"
+                  }
+                },
+                "required": [
+                  "Property"
+                ]
+              },
+              "minContains": 0,
+              "maxContains": 1
+            },
+            {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "Property": {
+                    "const": "PREDEFORMATION_DIRECTION"
+                  }
+                },
+                "required": [
+                  "Property"
+                ]
+              },
+              "minContains": 0,
+              "maxContains": 1
+            },
+            {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "Property": {
+                    "const": "HEAT_TREATMENT"
+                  }
+                },
+                "required": [
+                  "Property"
+                ]
+              },
+              "minContains": 0,
+              "maxContains": 1
+            },
+            {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "Property": {
+                    "const": "SPECIMEN_WIDTH_ACTUAL"
+                  }
+                },
+                "required": [
+                  "Property"
+                ]
+              },
+              "minContains": 1,
+              "maxContains": 1
+            },
+            {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "Property": {
+                    "const": "SPECIMEN_THICKNESS_ACTUAL"
+                  }
+                },
+                "required": [
+                  "Property"
+                ]
+              },
+              "minContains": 1,
+              "maxContains": 1
+            },
+            {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "Property": {
+                    "const": "GAUGE_LENGTH_ACTUAL"
+                  }
+                },
+                "required": [
+                  "Property"
+                ]
+              },
+              "minContains": 1,
+              "maxContains": 1
+            },
+            {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "Property": {
+                    "const": "TEST_TEMPERATURE_NOMINAL"
+                  }
+                },
+                "required": [
+                  "Property"
+                ]
+              },
+              "minContains": 1,
+              "maxContains": 1
+            },
+            {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "Property": {
+                    "const": "TEST_SPEED_NOMINAL"
+                  }
+                },
+                "required": [
+                  "Property"
+                ]
+              },
+              "minContains": 0,
+              "maxContains": 1
+            },
+            {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "Property": {
+                    "const": "TEST_SPEED_ACTUAL"
+                  }
+                },
+                "required": [
+                  "Property"
+                ]
+              },
+              "minContains": 0,
+              "maxContains": 1
+            },
+            {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "Property": {
+                    "const": "STRAIN_RATE_NOMINAL"
+                  }
+                },
+                "required": [
+                  "Property"
+                ]
+              },
+              "minContains": 1,
+              "maxContains": 1
+            },
+            {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "Property": {
+                    "const": "STRAIN_RATE_ACTUAL"
+                  }
+                },
+                "required": [
+                  "Property"
+                ]
+              },
+              "minContains": 0,
+              "maxContains": 1
+            }
+          ],
+          "description": "Data header fields using the keywords of SEP 1240:2026-01, 12.3 (Property = keyword, unit as given in <>). Additional fields are allowed (2.5)."
+        }
+      },
+      "required": [
+        "_id",
+        "_type",
+        "Attributes"
+      ]
+    },
+    "SEP1240.SingleResults": {
+      "type": "array",
+      "description": "Characteristic values of one test: Rp0.2 (or ReL/ReH), Rm, Ag, A80, n-value and r-value are mandatory, ALued and BH2 optional, each at most once (SEP 1240:2026-01, 5.7.2).",
+      "minItems": 1,
+      "items": {
+        "allOf": [
+          {
+            "$ref": "#/$defs/SEP1240.SingleResultPoint"
+          },
+          {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/SEP1240.YieldStrength"
+              },
+              {
+                "$ref": "#/$defs/SEP1240.TensileStrength"
+              },
+              {
+                "$ref": "#/$defs/SEP1240.YieldPointElongation"
+              },
+              {
+                "$ref": "#/$defs/SEP1240.UniformElongation"
+              },
+              {
+                "$ref": "#/$defs/SEP1240.ElongationA80"
+              },
+              {
+                "$ref": "#/$defs/SEP1240.StrainHardeningExponent"
+              },
+              {
+                "$ref": "#/$defs/SEP1240.PlasticStrainRatio"
+              },
+              {
+                "$ref": "#/$defs/SEP1240.BakeHardeningIndex"
+              }
+            ]
+          }
+        ]
+      },
+      "allOf": [
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "Property": {
+                "const": "Yield Strength"
+              }
+            },
+            "required": [
+              "Property"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 2
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "Property": {
+                "const": "Yield Strength"
+              },
+              "Symbol": {
+                "const": "Rp0.2"
+              }
+            },
+            "required": [
+              "Property",
+              "Symbol"
+            ]
+          },
+          "minContains": 0,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "Property": {
+                "const": "Yield Strength"
+              },
+              "Symbol": {
+                "const": "ReL"
+              }
+            },
+            "required": [
+              "Property",
+              "Symbol"
+            ]
+          },
+          "minContains": 0,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "Property": {
+                "const": "Yield Strength"
+              },
+              "Symbol": {
+                "const": "ReH"
+              }
+            },
+            "required": [
+              "Property",
+              "Symbol"
+            ]
+          },
+          "minContains": 0,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "Property": {
+                "const": "Tensile Strength"
+              }
+            },
+            "required": [
+              "Property"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "Property": {
+                "const": "Uniform Elongation"
+              }
+            },
+            "required": [
+              "Property"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "Property": {
+                "const": "Elongation at Fracture"
+              }
+            },
+            "required": [
+              "Property"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "Property": {
+                "const": "Strain Hardening Exponent"
+              }
+            },
+            "required": [
+              "Property"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "Property": {
+                "const": "Plastic Strain Ratio"
+              }
+            },
+            "required": [
+              "Property"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "Property": {
+                "const": "Yield Point Elongation"
+              }
+            },
+            "required": [
+              "Property"
+            ]
+          },
+          "minContains": 0,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "Property": {
+                "const": "Bake Hardening Index"
+              }
+            },
+            "required": [
+              "Property"
+            ]
+          },
+          "minContains": 0,
+          "maxContains": 1
+        }
+      ]
+    },
+    "SEP1240.ReportedProperties": {
+      "type": "array",
+      "description": "Consolidated characteristic values of the test series; same set as for single results. Each references the single results it was derived from.",
+      "minItems": 1,
+      "items": {
+        "allOf": [
+          {
+            "$ref": "#/$defs/SEP1240.ReportedPropertyPoint"
+          },
+          {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/SEP1240.YieldStrength"
+              },
+              {
+                "$ref": "#/$defs/SEP1240.TensileStrength"
+              },
+              {
+                "$ref": "#/$defs/SEP1240.YieldPointElongation"
+              },
+              {
+                "$ref": "#/$defs/SEP1240.UniformElongation"
+              },
+              {
+                "$ref": "#/$defs/SEP1240.ElongationA80"
+              },
+              {
+                "$ref": "#/$defs/SEP1240.StrainHardeningExponent"
+              },
+              {
+                "$ref": "#/$defs/SEP1240.PlasticStrainRatio"
+              },
+              {
+                "$ref": "#/$defs/SEP1240.BakeHardeningIndex"
+              }
+            ]
+          }
+        ]
+      },
+      "allOf": [
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "Property": {
+                "const": "Yield Strength"
+              }
+            },
+            "required": [
+              "Property"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 2
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "Property": {
+                "const": "Yield Strength"
+              },
+              "Symbol": {
+                "const": "Rp0.2"
+              }
+            },
+            "required": [
+              "Property",
+              "Symbol"
+            ]
+          },
+          "minContains": 0,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "Property": {
+                "const": "Yield Strength"
+              },
+              "Symbol": {
+                "const": "ReL"
+              }
+            },
+            "required": [
+              "Property",
+              "Symbol"
+            ]
+          },
+          "minContains": 0,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "Property": {
+                "const": "Yield Strength"
+              },
+              "Symbol": {
+                "const": "ReH"
+              }
+            },
+            "required": [
+              "Property",
+              "Symbol"
+            ]
+          },
+          "minContains": 0,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "Property": {
+                "const": "Tensile Strength"
+              }
+            },
+            "required": [
+              "Property"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "Property": {
+                "const": "Uniform Elongation"
+              }
+            },
+            "required": [
+              "Property"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "Property": {
+                "const": "Elongation at Fracture"
+              }
+            },
+            "required": [
+              "Property"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "Property": {
+                "const": "Strain Hardening Exponent"
+              }
+            },
+            "required": [
+              "Property"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "Property": {
+                "const": "Plastic Strain Ratio"
+              }
+            },
+            "required": [
+              "Property"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "Property": {
+                "const": "Yield Point Elongation"
+              }
+            },
+            "required": [
+              "Property"
+            ]
+          },
+          "minContains": 0,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "Property": {
+                "const": "Bake Hardening Index"
+              }
+            },
+            "required": [
+              "Property"
+            ]
+          },
+          "minContains": 0,
+          "maxContains": 1
+        }
+      ]
+    },
+    "SEP1240.TargetProperties": {
+      "type": "array",
+      "description": "Target values (e.g. agreed upon according to SEP 1240:2026-01, 2.1); any subset of the characteristic values, each at most once.",
+      "minItems": 1,
+      "items": {
+        "allOf": [
+          {
+            "$ref": "#/$defs/SEP1240.TargetPropertyPoint"
+          },
+          {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/SEP1240.YieldStrength"
+              },
+              {
+                "$ref": "#/$defs/SEP1240.TensileStrength"
+              },
+              {
+                "$ref": "#/$defs/SEP1240.YieldPointElongation"
+              },
+              {
+                "$ref": "#/$defs/SEP1240.UniformElongation"
+              },
+              {
+                "$ref": "#/$defs/SEP1240.ElongationA80"
+              },
+              {
+                "$ref": "#/$defs/SEP1240.StrainHardeningExponent"
+              },
+              {
+                "$ref": "#/$defs/SEP1240.PlasticStrainRatio"
+              },
+              {
+                "$ref": "#/$defs/SEP1240.BakeHardeningIndex"
+              }
+            ]
+          }
+        ]
+      },
+      "allOf": [
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "Property": {
+                "const": "Yield Strength"
+              }
+            },
+            "required": [
+              "Property"
+            ]
+          },
+          "minContains": 0,
+          "maxContains": 2
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "Property": {
+                "const": "Yield Strength"
+              },
+              "Symbol": {
+                "const": "Rp0.2"
+              }
+            },
+            "required": [
+              "Property",
+              "Symbol"
+            ]
+          },
+          "minContains": 0,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "Property": {
+                "const": "Yield Strength"
+              },
+              "Symbol": {
+                "const": "ReL"
+              }
+            },
+            "required": [
+              "Property",
+              "Symbol"
+            ]
+          },
+          "minContains": 0,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "Property": {
+                "const": "Yield Strength"
+              },
+              "Symbol": {
+                "const": "ReH"
+              }
+            },
+            "required": [
+              "Property",
+              "Symbol"
+            ]
+          },
+          "minContains": 0,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "Property": {
+                "const": "Tensile Strength"
+              }
+            },
+            "required": [
+              "Property"
+            ]
+          },
+          "minContains": 0,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "Property": {
+                "const": "Uniform Elongation"
+              }
+            },
+            "required": [
+              "Property"
+            ]
+          },
+          "minContains": 0,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "Property": {
+                "const": "Elongation at Fracture"
+              }
+            },
+            "required": [
+              "Property"
+            ]
+          },
+          "minContains": 0,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "Property": {
+                "const": "Strain Hardening Exponent"
+              }
+            },
+            "required": [
+              "Property"
+            ]
+          },
+          "minContains": 0,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "Property": {
+                "const": "Plastic Strain Ratio"
+              }
+            },
+            "required": [
+              "Property"
+            ]
+          },
+          "minContains": 0,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "Property": {
+                "const": "Yield Point Elongation"
+              }
+            },
+            "required": [
+              "Property"
+            ]
+          },
+          "minContains": 0,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "Property": {
+                "const": "Bake Hardening Index"
+              }
+            },
+            "required": [
+              "Property"
+            ]
+          },
+          "minContains": 0,
+          "maxContains": 1
+        }
+      ]
+    },
+    "SEP1240.SingleResultPoint": {
+      "type": "object",
+      "properties": {
+        "_type": {
+          "const": "SingleResultPoint"
+        }
+      },
+      "required": [
+        "_id",
+        "_type"
+      ]
+    },
+    "SEP1240.ReportedPropertyPoint": {
+      "type": "object",
+      "properties": {
+        "_type": {
+          "const": "ConsolidatedCharacteristicValue"
+        },
+        "SingleResultIDs": {
+          "type": "array",
+          "minItems": 3,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "_id",
+        "_type",
+        "Aggregation",
+        "SingleResultIDs"
+      ]
+    },
+    "SEP1240.TargetPropertyPoint": {
+      "type": "object",
+      "properties": {
+        "_type": {
+          "const": "ConsolidatedCharacteristicValue"
+        }
+      },
+      "required": [
+        "_id",
+        "_type"
+      ]
+    },
+    "SEP1240.YieldStrength": {
+      "type": "object",
+      "description": "Yield strength Rp0.2 (or ReL / ReH for materials with a pronounced yield point) according to EN ISO 6892-1 at constant strain rate (SEP 1240:2026-01, 5.7.2, 5.8).",
+      "properties": {
+        "Property": {
+          "const": "Yield Strength"
+        },
+        "Unit": {
+          "const": "MPa"
+        },
+        "Symbol": {
+          "enum": [
+            "Rp0.2",
+            "ReL",
+            "ReH"
+          ]
+        },
+        "Value": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 2000
+        }
+      },
+      "required": [
+        "Property",
+        "Unit",
+        "Symbol",
+        "Value"
+      ]
+    },
+    "SEP1240.TensileStrength": {
+      "type": "object",
+      "description": "Tensile strength Rm according to EN ISO 6892-1 at constant strain rate (SEP 1240:2026-01, 5.7.2).",
       "properties": {
         "Property": {
           "const": "Tensile Strength"
@@ -68,166 +1456,47 @@
           "const": "Rm"
         },
         "Value": {
-          "description": "Tensile value with precision to 1 decimal places",
-          "maximum": 2500,
+          "type": "number",
           "minimum": 1,
-          "multipleOf": 0.1,
-          "type": "number"
-        },
-        "Rounding": {
-          "$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.RestrictedString"
-        },
-        "RoundingAccuracy": {
-          "type": "number"
-        },
-        "_id": {
-          "$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.Identifier"
-        },
-        "_type": {
-          "oneOf": [
-            {
-              "const": "ConsolidatedCharacteristicValue"
-            },
-            {
-              "const": "SingleResultPoint"
-            }
-          ],
-          "type": "string"
-        },
-        "Aggregation": {
-          "$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.RestrictedString"
-        },
-        "Comment": {
-          "$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.RestrictedString"
-        },
-        "CriterionType": {
-          "$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.RestrictedString"
+          "maximum": 2500
         }
       },
       "required": [
         "Property",
+        "Unit",
+        "Symbol",
         "Value"
-      ],
-      "type": "object"
+      ]
     },
-    "3-1_Certificate.YieldStrength": {
+    "SEP1240.YieldPointElongation": {
+      "type": "object",
+      "description": "Yield point elongation A_Lued (SEP symbol 'ALüd', written without umlaut as required for 7-bit ASCII, SEP 1240:2026-01, 2.5) according to EN ISO 6892-1. Only for materials with a pronounced yield point.",
       "properties": {
         "Property": {
-          "const": "Yield Strength"
-        },
-        "Unit": {
-          "const": "MPa"
-        },
-        "Symbol": {
-          "oneOf": [
-            {
-              "const": "Rp0.2"
-            },
-            {
-              "const": "ReL"
-            },
-            {
-              "const": "ReH"
-            }
-          ]
-        },
-        "Value": {
-          "description": "Yield strength (Rp0.2 or ReL/ReH)",
-          "maximum": 2000,
-          "minimum": 1,
-          "multipleOf": 0.1,
-          "type": "number"
-        },
-        "Rounding": {
-          "$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.RestrictedString"
-        },
-        "RoundingAccuracy": {
-          "type": "number"
-        },
-        "_id": {
-          "$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.Identifier"
-        },
-        "_type": {
-          "oneOf": [
-            {
-              "const": "ConsolidatedCharacteristicValue"
-            },
-            {
-              "const": "SingleResultPoint"
-            }
-          ],
-          "type": "string"
-        },
-        "Aggregation": {
-          "$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.RestrictedString"
-        },
-        "Comment": {
-          "$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.RestrictedString"
-        },
-        "CriterionType": {
-          "$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.RestrictedString"
-        }
-      },
-      "required": [
-        "Property",
-        "Value"
-      ],
-      "type": "object"
-    },
-    "3-1_Certificate.ElongationA50": {
-      "properties": {
-        "Property": {
-          "const": "Elongation at Fracture"
+          "const": "Yield Point Elongation"
         },
         "Unit": {
           "const": "%"
         },
         "Symbol": {
-          "const": "A50"
+          "const": "ALued"
         },
         "Value": {
-          "description": "Elongation A50 generic regardless of type",
-          "maximum": 100,
+          "type": "number",
           "minimum": 0,
-          "type": "number"
-        },
-        "Rounding": {
-          "$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.RestrictedString"
-        },
-        "RoundingAccuracy": {
-          "type": "number"
-        },
-        "_id": {
-          "$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.Identifier"
-        },
-        "_type": {
-          "oneOf": [
-            {
-              "const": "ConsolidatedCharacteristicValue"
-            },
-            {
-              "const": "SingleResultPoint"
-            }
-          ],
-          "type": "string"
-        },
-        "Aggregation": {
-          "$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.RestrictedString"
-        },
-        "Comment": {
-          "$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.RestrictedString"
-        },
-        "CriterionType": {
-          "$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.RestrictedString"
+          "maximum": 100
         }
       },
       "required": [
         "Property",
+        "Unit",
+        "Symbol",
         "Value"
-      ],
-      "type": "object"
+      ]
     },
-    "3-1_Certificate.UniformElongation": {
+    "SEP1240.UniformElongation": {
+      "type": "object",
+      "description": "Plastic uniform elongation Ag according to EN ISO 6892-1 at constant strain rate (SEP 1240:2026-01, 5.7.2).",
       "properties": {
         "Property": {
           "const": "Uniform Elongation"
@@ -239,352 +1508,667 @@
           "const": "Ag"
         },
         "Value": {
-          "description": "Uniform Elongation",
-          "maximum": 100,
+          "type": "number",
           "minimum": 0,
-          "type": "number"
+          "maximum": 100
+        }
+      },
+      "required": [
+        "Property",
+        "Unit",
+        "Symbol",
+        "Value"
+      ]
+    },
+    "SEP1240.ElongationA80": {
+      "type": "object",
+      "description": "Percentage elongation after fracture A80 mm (initial gauge length 80 mm, EN ISO 6892-1 specimen shape 2; SEP 1240:2026-01, 5.2, 5.7.2, 5.8).",
+      "properties": {
+        "Property": {
+          "const": "Elongation at Fracture"
         },
-        "Rounding": {
-          "$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.RestrictedString"
+        "Unit": {
+          "const": "%"
         },
-        "RoundingAccuracy": {
-          "type": "number"
+        "Symbol": {
+          "const": "A80"
         },
-        "_id": {
-          "$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.Identifier"
+        "Value": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        }
+      },
+      "required": [
+        "Property",
+        "Unit",
+        "Symbol",
+        "Value"
+      ]
+    },
+    "SEP1240.StrainHardeningExponent": {
+      "type": "object",
+      "description": "n-value according to EN ISO 10275. The strain range in % for which the n-value is valid is mandatory (SEP 1240:2026-01, 5.7.2) and is encoded in the symbol, e.g. 'n10-20' or 'n10-Ag'. Dimensionless.",
+      "properties": {
+        "Property": {
+          "const": "Strain Hardening Exponent"
         },
-        "_type": {
-          "oneOf": [
-            {
-              "const": "ConsolidatedCharacteristicValue"
-            },
-            {
-              "const": "SingleResultPoint"
-            }
-          ],
+        "Symbol": {
+          "type": "string",
+          "pattern": "^n[0-9]+(\\.[0-9]+)?-([0-9]+(\\.[0-9]+)?|Ag)$"
+        },
+        "Value": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "required": [
+        "Property",
+        "Symbol",
+        "Value"
+      ]
+    },
+    "SEP1240.PlasticStrainRatio": {
+      "type": "object",
+      "description": "r-value according to EN ISO 10113, evaluated as the slope of logarithmic change of width versus logarithmic change of length in the strain range between 2 % and Ag - 1 % (SEP 1240:2026-01, 2.3, 5.7.2). Dimensionless.",
+      "properties": {
+        "Property": {
+          "const": "Plastic Strain Ratio"
+        },
+        "Symbol": {
+          "const": "r"
+        },
+        "Value": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        }
+      },
+      "required": [
+        "Property",
+        "Symbol",
+        "Value"
+      ]
+    },
+    "SEP1240.BakeHardeningIndex": {
+      "type": "object",
+      "description": "Bake-hardening index BH2 according to EN 10325 (SEP 1240:2026-01, 3.2.3, 5.7.2). Only for heat-treated (W1/W170) specimens.",
+      "properties": {
+        "Property": {
+          "const": "Bake Hardening Index"
+        },
+        "Unit": {
+          "const": "MPa"
+        },
+        "Symbol": {
+          "const": "BH2"
+        },
+        "Value": {
+          "type": "number",
+          "minimum": -500,
+          "maximum": 500
+        }
+      },
+      "required": [
+        "Property",
+        "Unit",
+        "Symbol",
+        "Value"
+      ]
+    },
+    "SEP1240.TestParameter.SPECIMEN_GEOMETRY": {
+      "type": "object",
+      "properties": {
+        "Property": {},
+        "Value": {
           "type": "string"
-        },
-        "Aggregation": {
-          "$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.RestrictedString"
-        },
-        "Comment": {
-          "$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.RestrictedString"
-        },
-        "CriterionType": {
-          "$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.RestrictedString"
         }
       },
       "required": [
         "Property",
         "Value"
       ],
-      "type": "object"
+      "description": "Specimen geometry, EN ISO 6892-1 specimen shape 2 (5.2)."
     },
-    "3-1_Certificate.ChangeOfWidth": {
+    "SEP1240.TestParameter.SPECIMEN_ORIENTATION": {
+      "type": "object",
       "properties": {
-        "Property": {
-          "const": "Change of Width"
-        },
-        "Unit": {
-          "const": "mm"
+        "Property": {},
+        "Value": {
+          "enum": [
+            "LONGITUDINAL",
+            "TRANSVERSAL",
+            "DIAGONAL"
+          ]
         }
       },
       "required": [
         "Property",
-        "Unit"
+        "Value"
       ],
-      "type": "object"
+      "description": "Specimen orientation: transversal = 90 deg, longitudinal = 0 deg, diagonal = 45 deg to rolling direction (12.3, Table 5-1)."
     },
-    "3-1_Certificate.ChangeOfWidthValue": {
-      "description": "Change of Width value in millimeters",
-      "type": "number"
-    },
-    "3-1_Certificate.Displacement": {
+    "SEP1240.TestParameter.PREDEFORMATION_NOMINAL": {
+      "type": "object",
       "properties": {
-        "Property": {
-          "const": "Displacement"
-        },
+        "Property": {},
         "Unit": {
-          "const": "mm",
-          "type": "string"
-        }
-      },
-      "required": [
-        "Property",
-        "Unit"
-      ],
-      "type": "object"
-    },
-    "3-1_Certificate.DisplacementValue": {
-      "description": "Displacement value in millimeters",
-      "type": "number"
-    },
-    "3-1_Certificate.Force": {
-      "properties": {
-        "Property": {
-          "const": "Force"
-        },
-        "Unit": {
-          "const": "N"
-        }
-      },
-      "required": [
-        "Property",
-        "Unit"
-      ],
-      "type": "object"
-    },
-    "3-1_Certificate.ForceValue": {
-      "description": "Force value in Newtons",
-      "type": "number"
-    },
-    "3-1_Certificate.Strain": {
-      "properties": {
-        "Property": {
-          "const": "Strain"
-        },
-        "Unit": {
-          "const": "Strain epsilon"
+          "const": "%"
         },
         "Value": {
-          "description": "Strain value with precision to 4 decimal places",
-          "maximum": 0.1,
-          "minimum": 0.001,
-          "multipleOf": 0.0001,
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
         }
       },
       "required": [
         "Property",
+        "Value",
         "Unit"
       ],
-      "type": "object"
+      "description": "Nominal pre-straining (Table 5-1: 0, 2, 10 %)."
     },
-    "3-1_Certificate.StrainValue": {
-      "description": "Strain value with precision to 4 decimal places",
-      "maximum": 1,
-      "minimum": 0,
-      "type": "number"
-    },
-    "3-1_Certificate.Stress": {
+    "SEP1240.TestParameter.PREDEFORMATION_ACTUAL": {
+      "type": "object",
       "properties": {
-        "Property": {
-          "const": "Stress"
-        },
+        "Property": {},
         "Unit": {
-          "const": "MPa"
+          "const": "%"
+        },
+        "Value": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
         }
       },
       "required": [
         "Property",
+        "Value",
         "Unit"
-      ],
-      "type": "object"
+      ]
     },
-    "3-1_Certificate.StressValue": {
-      "description": "Stress value in MPa",
-      "maximum": 2000,
-      "minimum": 0,
-      "type": "number"
-    },
-    "3-1_Certificate.Time": {
+    "SEP1240.TestParameter.PREDEFORMATION_DIRECTION": {
+      "type": "object",
       "properties": {
-        "Property": {
-          "const": "Time"
-        },
-        "Unit": {
-          "const": "s"
-        }
-      },
-      "required": [
-        "Property",
-        "Unit"
-      ],
-      "type": "object"
-    },
-    "3-1_Certificate.TimeValue": {
-      "description": "Time in seconds with precision to 2 decimal places",
-      "maximum": 1000,
-      "minimum": 0,
-      "type": "number"
-    },
-    "3-1_Tensile_Certificate.ArraySpec": {
-      "description": "Specification of array structure for tensile testing data.",
-      "maxItems": 6,
-      "minItems": 6,
-      "prefixItems": [
-        {
-          "$ref": "#/$defs/3-1_Certificate.Strain"
-        },
-        {
-          "$ref": "#/$defs/3-1_Certificate.Stress"
-        },
-        {
-          "$ref": "#/$defs/3-1_Certificate.Time"
-        },
-        {
-          "$ref": "#/$defs/3-1_Certificate.Force"
-        },
-        {
-          "$ref": "#/$defs/3-1_Certificate.Displacement"
-        },
-        {
-          "$ref": "#/$defs/3-1_Certificate.ChangeOfWidth"
-        }
-      ],
-      "type": "object"
-    },
-    "3-1_Tensile_Certificate.ArrayValue": {
-      "description": "Values corresponding to the tensile testing data.",
-      "items": {
-        "maxItems": 6,
-        "minItems": 6,
-        "prefixItems": [
-          {
-            "$ref": "#/$defs/3-1_Certificate.StrainValue"
-          },
-          {
-            "$ref": "#/$defs/3-1_Certificate.StressValue"
-          },
-          {
-            "$ref": "#/$defs/3-1_Certificate.TimeValue"
-          },
-          {
-            "$ref": "#/$defs/3-1_Certificate.ForceValue"
-          },
-          {
-            "$ref": "#/$defs/3-1_Certificate.DisplacementValue"
-          },
-          {
-            "$ref": "#/$defs/3-1_Certificate.ChangeOfWidthValue"
-          }
-        ],
-        "type": "array"
-      },
-      "maxItems": 80,
-      "minItems": 1,
-      "type": "array"
-    },
-    "3-1_Tensile_Certificate.InformationSet": {
-      "additionalProperties": false,
-      "anyOf": [
-        {
-          "required": [
-            "Attributes"
-          ]
-        },
-        {
-          "required": [
-            "ArraySpec",
-            "ArrayValue"
+        "Property": {},
+        "Value": {
+          "enum": [
+            "LONGITUDINAL",
+            "TRANSVERSAL",
+            "DIAGONAL",
+            "NONE"
           ]
         }
-      ],
+      },
+      "required": [
+        "Property",
+        "Value"
+      ]
+    },
+    "SEP1240.TestParameter.HEAT_TREATMENT": {
+      "type": "object",
       "properties": {
-        "_id": {
-          "$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.Identifier"
+        "Property": {},
+        "Value": {
+          "type": "string",
+          "pattern": "^(O|W[0-9A-Za-z]*)$"
+        }
+      },
+      "required": [
+        "Property",
+        "Value"
+      ],
+      "description": "O = without heat treatment, W1 = 170 degC / 20 min, Wx = upon agreement (3.2.2, 3.3)."
+    },
+    "SEP1240.TestParameter.SPECIMEN_WIDTH_ACTUAL": {
+      "type": "object",
+      "properties": {
+        "Property": {},
+        "Unit": {
+          "const": "mm"
         },
+        "Value": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": [
+        "Property",
+        "Value",
+        "Unit"
+      ],
+      "description": "Initial width (mandatory, 5.7.2)."
+    },
+    "SEP1240.TestParameter.SPECIMEN_THICKNESS_ACTUAL": {
+      "type": "object",
+      "properties": {
+        "Property": {},
+        "Unit": {
+          "const": "mm"
+        },
+        "Value": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 3
+        }
+      },
+      "required": [
+        "Property",
+        "Value",
+        "Unit"
+      ],
+      "description": "Initial thickness (mandatory, 5.7.2). Scope: sheet thickness up to 3 mm (1)."
+    },
+    "SEP1240.TestParameter.GAUGE_LENGTH_ACTUAL": {
+      "type": "object",
+      "properties": {
+        "Property": {},
+        "Unit": {
+          "const": "mm"
+        },
+        "Value": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": [
+        "Property",
+        "Value",
+        "Unit"
+      ],
+      "description": "Initial measuring length L0 (mandatory, 5.7.2); nominal 80 mm for specimen shape 2."
+    },
+    "SEP1240.TestParameter.TEST_TEMPERATURE_NOMINAL": {
+      "type": "object",
+      "properties": {
+        "Property": {},
+        "Unit": {
+          "const": "K"
+        },
+        "Value": {
+          "enum": [
+            233,
+            296,
+            373
+          ]
+        }
+      },
+      "required": [
+        "Property",
+        "Value",
+        "Unit"
+      ],
+      "description": "Test temperature at the specimen: 233 K, 296 K (RT) or 373 K, permissible variation +/- 5 K (4.3)."
+    },
+    "SEP1240.TestParameter.TEST_SPEED_NOMINAL": {
+      "type": "object",
+      "properties": {
+        "Property": {},
+        "Unit": {
+          "const": "mm/s"
+        },
+        "Value": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": [
+        "Property",
+        "Value",
+        "Unit"
+      ]
+    },
+    "SEP1240.TestParameter.TEST_SPEED_ACTUAL": {
+      "type": "object",
+      "properties": {
+        "Property": {},
+        "Unit": {
+          "const": "mm/s"
+        },
+        "Value": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": [
+        "Property",
+        "Value",
+        "Unit"
+      ]
+    },
+    "SEP1240.TestParameter.STRAIN_RATE_NOMINAL": {
+      "type": "object",
+      "properties": {
+        "Property": {},
+        "Unit": {
+          "const": "1/s"
+        },
+        "Value": {
+          "const": 0.004
+        }
+      },
+      "required": [
+        "Property",
+        "Value",
+        "Unit"
+      ],
+      "description": "The entire test is run at a constant strain rate of 0.4 %/s (0.004/s) relative to L0 (5.4.2)."
+    },
+    "SEP1240.TestParameter.STRAIN_RATE_ACTUAL": {
+      "type": "object",
+      "properties": {
+        "Property": {},
+        "Unit": {
+          "const": "1/s"
+        },
+        "Value": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": [
+        "Property",
+        "Value",
+        "Unit"
+      ]
+    },
+    "SEP1240.RawData": {
+      "type": "object",
+      "description": "Continuously measured raw data, saved column-wise: time, force, displacement, change of width (SEP 1240:2026-01, 5.7.2, data header 12.3).",
+      "properties": {
         "_type": {
           "const": "InformationSet"
         },
+        "Designation": {
+          "const": "Raw data"
+        },
         "ArraySpec": {
-          "items": {
-            "$ref": "#/$defs/3-1_Tensile_Certificate.ArraySpec"
-          },
-          "minItems": 1,
-          "type": "array"
+          "$ref": "#/$defs/SEP1240.RawData.ArraySpec"
         },
         "ArrayValue": {
-          "items": {
-            "$ref": "#/$defs/3-1_Tensile_Certificate.ArrayValue"
-          },
-          "minItems": 1,
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
-    "3-1_Tensile_Certificate.TestSeries": {
-      "properties": {
-        "_id": {
-          "$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.Identifier"
-        },
-        "_type": {
-          "const": "TestSeries"
-        },
-        "Executions": {
-          "items": {
-            "$ref": "#/$defs/3-1_Certificate_Tensile.TestExecution"
-          },
-          "type": "array"
-        },
-        "ConsolidatedCharacteristicValues": {
-          "type": "array",
-          "minItems": 4,
-          "maxItems": 4,
-          "uniqueItems": true,
-          "items": {
-            "oneOf": [
-              {
-                "$ref": "#/$defs/3-1_Certificate.YieldStrength"
-              },
-              {
-                "$ref": "#/$defs/3-1_Certificate.TensileStrength"
-              },
-              {
-                "$ref": "#/$defs/3-1_Certificate.ElongationA50"
-              },
-              {
-                "$ref": "#/$defs/3-1_Certificate.UniformElongation"
-              }
-            ]
-          }
-        },
-        "TargetCharacteristicValues": {
-          "type": "array",
-          "minItems": 4,
-          "maxItems": 4,
-          "uniqueItems": true,
-          "items": {
-            "oneOf": [
-              {
-                "$ref": "#/$defs/3-1_Certificate.YieldStrength"
-              },
-              {
-                "$ref": "#/$defs/3-1_Certificate.TensileStrength"
-              },
-              {
-                "$ref": "#/$defs/3-1_Certificate.ElongationA50"
-              },
-              {
-                "$ref": "#/$defs/3-1_Certificate.UniformElongation"
-              }
-            ]
-          }
+          "$ref": "#/$defs/SEP1240.RawData.ArrayValue"
         }
       },
       "required": [
         "_id",
         "_type",
-        "Executions",
-        "ConsolidatedCharacteristicValues"
-      ],
-      "type": "object"
+        "Designation",
+        "ArraySpec",
+        "ArrayValue"
+      ]
     },
-    "3-1_Certificate.BranchingTestSeries": {
-      "type": "object",
-      "if": {
-        "properties": {
-          "TestType": {
-            "const": "Optical Emission Spectroscopy"
+    "SEP1240.RawData.ArraySpec": {
+      "type": "array",
+      "description": "Column definitions: TIME <s>, FORCE <N>, DISPLACEMENT <mm>, WIDTH_CHANGE <mm>.",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": false,
+      "prefixItems": [
+        {
+          "type": "object",
+          "properties": {
+            "Property": {
+              "const": "TIME"
+            },
+            "Unit": {
+              "const": "s"
+            }
+          },
+          "required": [
+            "Property",
+            "Unit"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Property": {
+              "const": "FORCE"
+            },
+            "Unit": {
+              "const": "N"
+            }
+          },
+          "required": [
+            "Property",
+            "Unit"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Property": {
+              "const": "DISPLACEMENT"
+            },
+            "Unit": {
+              "const": "mm"
+            }
+          },
+          "required": [
+            "Property",
+            "Unit"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Property": {
+              "const": "WIDTH_CHANGE"
+            },
+            "Unit": {
+              "const": "mm"
+            }
+          },
+          "required": [
+            "Property",
+            "Unit"
+          ]
+        }
+      ]
+    },
+    "SEP1240.RawData.ArrayValue": {
+      "type": "array",
+      "description": "One row per measuring point.",
+      "minItems": 1,
+      "items": {
+        "type": "array",
+        "minItems": 4,
+        "maxItems": 4,
+        "items": false,
+        "prefixItems": [
+          {
+            "type": "number",
+            "minimum": 0
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "null once the width extensometer has been removed"
           }
+        ]
+      }
+    },
+    "SEP1240.EngineeringStressStrainCurve": {
+      "type": "object",
+      "description": "Evaluated engineering (technical) stress-strain curve (SEP 1240:2026-01, 5.7.2).",
+      "properties": {
+        "_type": {
+          "const": "InformationSet"
+        },
+        "Designation": {
+          "const": "Engineering stress-strain curve"
+        },
+        "ArraySpec": {
+          "$ref": "#/$defs/SEP1240.EngineeringStressStrainCurve.ArraySpec"
+        },
+        "ArrayValue": {
+          "$ref": "#/$defs/SEP1240.EngineeringStressStrainCurve.ArrayValue"
         }
       },
-      "then": {
-        "$ref": "#/$defs/3-1_Tensile_Certificate.TestSeries"
+      "required": [
+        "_id",
+        "_type",
+        "Designation",
+        "ArraySpec",
+        "ArrayValue"
+      ]
+    },
+    "SEP1240.EngineeringStressStrainCurve.ArraySpec": {
+      "type": "array",
+      "description": "Column definitions: ENGINEERING_STRAIN <->, ENGINEERING_STRESS <MPa>.",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": false,
+      "prefixItems": [
+        {
+          "type": "object",
+          "properties": {
+            "Property": {
+              "const": "ENGINEERING_STRAIN"
+            },
+            "Unit": {
+              "const": "-"
+            }
+          },
+          "required": [
+            "Property",
+            "Unit"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Property": {
+              "const": "ENGINEERING_STRESS"
+            },
+            "Unit": {
+              "const": "MPa"
+            }
+          },
+          "required": [
+            "Property",
+            "Unit"
+          ]
+        }
+      ]
+    },
+    "SEP1240.EngineeringStressStrainCurve.ArrayValue": {
+      "type": "array",
+      "description": "One row per measuring point.",
+      "minItems": 1,
+      "items": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 2,
+        "items": false,
+        "prefixItems": [
+          {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 2500
+          }
+        ]
+      }
+    },
+    "SEP1240.FlowCurve": {
+      "type": "object",
+      "description": "Evaluated flow curve, true stress versus true plastic strain (SEP 1240:2026-01, 5.4.2, 5.7.2).",
+      "properties": {
+        "_type": {
+          "const": "InformationSet"
+        },
+        "Designation": {
+          "const": "Flow curve"
+        },
+        "ArraySpec": {
+          "$ref": "#/$defs/SEP1240.FlowCurve.ArraySpec"
+        },
+        "ArrayValue": {
+          "$ref": "#/$defs/SEP1240.FlowCurve.ArrayValue"
+        }
       },
-      "else": {
-        "$ref": "../generic/VDA_231-301_generic_v1.0.0.schema.json#/$defs/Generic.TestSeries"
+      "required": [
+        "_id",
+        "_type",
+        "Designation",
+        "ArraySpec",
+        "ArrayValue"
+      ]
+    },
+    "SEP1240.FlowCurve.ArraySpec": {
+      "type": "array",
+      "description": "Column definitions: TRUE_PLASTIC_STRAIN <->, TRUE_STRESS <MPa>.",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": false,
+      "prefixItems": [
+        {
+          "type": "object",
+          "properties": {
+            "Property": {
+              "const": "TRUE_PLASTIC_STRAIN"
+            },
+            "Unit": {
+              "const": "-"
+            }
+          },
+          "required": [
+            "Property",
+            "Unit"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Property": {
+              "const": "TRUE_STRESS"
+            },
+            "Unit": {
+              "const": "MPa"
+            }
+          },
+          "required": [
+            "Property",
+            "Unit"
+          ]
+        }
+      ]
+    },
+    "SEP1240.FlowCurve.ArrayValue": {
+      "type": "array",
+      "description": "One row per measuring point.",
+      "minItems": 1,
+      "items": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 2,
+        "items": false,
+        "prefixItems": [
+          {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 2
+          },
+          {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 3000
+          }
+        ]
       }
     }
   }
